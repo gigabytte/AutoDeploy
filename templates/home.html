@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<h1> Welcome to AutoDeploy </h1>
+{% if user.is_authenticated %}
+  Hello, {{ user.username }}!
+  <p><a href="{% url 'logout' %}">Log Out</a></p>
+{% else %}
+  <a href="{% url 'login' %}">Log In</a>
+  <p><a href="{% url 'signup' %}">Register</a></p>
+{% endif %}
+
+{% endblock %}
