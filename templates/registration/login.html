@@ -1,12 +1,81 @@
-{% extends 'base.html' %}
 
-{% block title %}Login{% endblock %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AutoDeploy | Log in</title>
 
-{% block content %}
-<h2>Log In</h2>
-<form method="post">
-  {% csrf_token %}
-  {{ form.as_p }}
-  <button type="submit">Log In</button>
-</form>
-{% endblock %}
+  <!-- Google Font: Source Sans Pro -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="{% static 'plugins/fontawesome-free/css/all.min.css'%}">
+  <!-- icheck bootstrap -->
+  <link rel="stylesheet" href="{% static 'plugins/icheck-bootstrap/icheck-bootstrap.min.css'%}">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="{% static 'dist/css/adminlte.min.css' %}">
+</head>
+<body class="hold-transition login-page">
+<div class="login-box">
+  <div class="login-logo">
+    <a href="{% url 'home' %}"><b>Auto</b>Deploy</a>
+  </div>
+  <!-- /.login-logo -->
+  <div class="card">
+    <div class="card-body login-card-body">
+      <p class="login-box-msg">Sign in to start your session</p>
+      {% block content %}
+      
+      {% block login_form %}
+      <form action="" method="post">
+          {% csrf_token %}
+          {% if message %}
+              <p class="login-box-msg" style="color: red;">{{ message }}</p>
+          {% endif %}
+          <div class="form-group has-feedback">
+              <input name="username" class="form-control" placeholder="Username">
+              <span class="glyphicon glyphicon-user form-control-feedback"></span>
+          </div>
+          <div class="form-group has-feedback">
+              <input type="password" name="password" class="form-control" placeholder="Password">
+              <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+          </div>
+          <div class="row">
+              <div class="col-xs-8">
+                  {% block login_form_links %}
+                  {% endblock %}
+              </div>
+              <div class="col-xs-4">
+                  <button type="submit" class="btn btn-primary btn-block btn-flat">Login</button>
+              </div>
+          </div>
+      </form>
+  {% endblock login_form %}
+
+      {% endblock %}
+      <!-- /.social-auth-links -->
+
+      <p class="mb-1">
+        <!-- NEED TO FIX! NO EMAIL PROVIDER YET ???? -->
+        <a href="{% url 'home' %}">I forgot my password</a>
+      </p>
+      <p class="mb-0">
+        <a href="{% url 'signup' %}" class="text-center">Register</a>
+      </p>
+    </div>
+    <!-- /.login-card-body -->
+  </div>
+</div>
+<!-- /.login-box -->
+
+<!-- REQUIRED SCRIPTS -->
+
+<!-- jQuery -->
+<script src="{% static 'plugins/jquery/jquery.min.js' %}"></script>
+<!-- Bootstrap 4 -->
+<script src="{% static 'plugins/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+<!-- AdminLTE App -->
+<script src="{% static 'dist/js/adminlte.min.js' %}"></script>
+</body>
+</html>
