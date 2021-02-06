@@ -19,3 +19,6 @@ Super used creds can be found in provided ``` super_user_auth.txt ```
 
 ## Resources
 Project Followed the [Django Login and Logout Tutorial](https://learndjango.com/tutorials/django-login-and-logout-tutorial) by Will Vincent
+
+### Known Issues
+- Downloading ```.env``` files from drive results in env file being saved as ```.txt``` file. Rename ``` env ``` file in root of AutoDeploy to ``` .env ```
