@@ -42,27 +42,23 @@
               <span class="glyphicon glyphicon-lock form-control-feedback"></span>
           </div>
           <div class="row">
-              <div class="col-xs-8">
-                  {% block login_form_links %}
-                  {% endblock %}
-              </div>
-              <div class="col-xs-4">
-                  <button type="submit" class="btn btn-primary btn-block btn-flat">Login</button>
-              </div>
+            <div class="col-8">
+              <a href="{% url 'home' %}" class="text-center">I forgot my password</a>
+            </div>
+            <!-- /.col -->
+            <div class="col-4">
+              <button type="submit" class="btn btn-primary btn-block">Login</button>
+            </div>
+            <!-- /.col -->
           </div>
+        
       </form>
   {% endblock login_form %}
 
       {% endblock %}
       <!-- /.social-auth-links -->
 
-      <p class="mb-1">
-        <!-- NEED TO FIX! NO EMAIL PROVIDER YET ???? -->
-        <a href="{% url 'home' %}">I forgot my password</a>
-      </p>
-      <p class="mb-0">
-        <a href="{% url 'signup' %}" class="text-center">Register</a>
-      </p>
+
     </div>
     <!-- /.login-card-body -->
   </div>
