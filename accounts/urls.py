@@ -6,5 +6,10 @@ urlpatterns = [
     path('',Views.Home.as_view(), name='home'),
     path('signup/', Views.SignUpView.as_view(), name='signup'),
     path('dashboard/',Views.Dashboard.as_view(), name='dashboard'),
-    path('logout/',Views.logout_view, name='logout'),
+    path('dashboard/profile/',Views.Profile.as_view(), name='profile'),
+    path('dashboard/network/',Views.Network.as_view(), name='network'),
+    path('dashboard/windows/',Views.Windows.as_view(), name='windows'),
+    path('dashboard/scripts/',Views.Scripts.as_view(), name='scripts'),
+    path('dashboard/devices/',Views.Devices.as_view(), name='devices'),
+    path('dashboard/logout/',Views.Logout.as_view(), name='logout'),
 ]

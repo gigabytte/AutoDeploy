@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>AutoDeploy | Registration Page</title>
-
+  <h1> Registration Page will be Deprecated in favour of client using LDAP</h1>
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
   <!-- Font Awesome -->
@@ -31,6 +31,30 @@
           <p class="bg-danger p-d ml-b">{{ error_message }}</p>
         {% endif %}
         <div class="form-group input-group mb-3">
+          <input value="{{ form.first_name.value|default_if_none:'' }}" name="{{ form.first_name.html_name }}" for="{{ form.first_name.id_for_label }}" type="text" class="form-control" placeholder="Fistname">
+          <div class="input-group-append">
+            <div class="input-group-text">
+              <span class="fas fa-user"></span>
+            </div>
+          </div>
+        </div>
+        <div class="form-group input-group mb-3">
+          <input value="{{ form.last_name.value|default_if_none:'' }}" name="{{ form.last_name.html_name }}" for="{{ form.last_name.id_for_label }}" type="text" class="form-control" placeholder="Lastname">
+          <div class="input-group-append">
+            <div class="input-group-text">
+              <span class="fas fa-user"></span>
+            </div>
+          </div>
+        </div>
+        <div class="form-group input-group mb-3">
+          <input value="{{ form.email.value|default_if_none:'' }}" name="{{ form.email.html_name }}" for="{{ form.email.id_for_label }}" type="email" class="form-control" placeholder="Email">
+          <div class="input-group-append">
+            <div class="input-group-text">
+              <span class="fas fa-envelope"></span>
+            </div>
+          </div>
+        </div>
+        <div class="form-group input-group mb-3">
           <input value="{{ form.username.value|default_if_none:'' }}" name="{{ form.username.html_name }}" for="{{ form.username.id_for_label }}" type="text" class="form-control" placeholder="Username">
           <div class="input-group-append">
             <div class="input-group-text">
@@ -39,7 +63,7 @@
           </div>
         </div>
         <div class="input-group mb-3">
-          <input value="{{ form.password.value|default_if_none:'' }}" name="{{ form.password.html_name }}" for="{{ form.password.id_for_label }}" type="password" class="form-control" placeholder="password">
+          <input value="{{ form.password.value|default_if_none:'' }}" name="{{ form.password.html_name }}" for="{{ form.password.id_for_label }}" type="password" class="form-control" placeholder="Password">
           <div class="input-group-append">
             <div class="input-group-text">
               <span class="fas fa-lock"></span>
@@ -47,7 +71,7 @@
           </div>
         </div>
         <div class="input-group mb-3">
-          <input value="{{ form.password_repeat.value|default_if_none:'' }}" name="{{ form.password_repeat.html_name }}" for="{{ form.password_repeat.id_for_label }}" type="password" class="form-control" placeholder="password_repeat">
+          <input value="{{ form.password_repeat.value|default_if_none:'' }}" name="{{ form.password_repeat.html_name }}" for="{{ form.password_repeat.id_for_label }}" type="password" class="form-control" placeholder="Confirm Password">
           <div class="input-group-append">
             <div class="input-group-text">
               <span class="fas fa-lock"></span>
