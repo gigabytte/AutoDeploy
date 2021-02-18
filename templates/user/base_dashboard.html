@@ -69,7 +69,7 @@
           <img src="{% static 'dist/img/user2-160x160.jpg' %}" class="img-circle elevation-2" alt="User Image">
         </div>
         <div class="info">
-          {% if request.user.first_name is defined %}
+          {% if request.user.first_name|length %}
             <a href="{% url 'profile' %}" class="d-block">Welcome, {{request.user.first_name}}</a>
           {% else %}
             <a href="{% url 'profile' %}" class="d-block">Welcome, {{request.user.username}}</a>
@@ -114,29 +114,31 @@
               </p>
             </a>
           </li>
-          <li class="nav-item has-treeview {% block nav_item_settings_tree_menu %}{% endblock nav_item_settings_tree_menu %}">
-            <a href="" class="nav-link {% block nav_item_settings_tree_active %}{% endblock nav_item_settings_tree_active %}">
-              <i class="nav-icon fas fa-tachometer-alt"></i>
-              <p>
-                Settings
-                <i class="right fas fa-angle-left"></i>
-              </p>
-            </a>
-            <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <a href="{% url 'scripts' %}" class="nav-link {% block nav_item_scripts %}{% endblock nav_item_scripts %}">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Scripts</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="{% url 'devices' %}" class="nav-link {% block nav_item_devices %}{% endblock nav_item_devices %}">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Devices</p>
-                </a>
-              </li>
-            </ul>
-          </li>
+          {% if request.user.is_superuser %}
+            <li class="nav-item has-treeview {% block nav_item_settings_tree_menu %}{% endblock nav_item_settings_tree_menu %}">
+              <a href="" class="nav-link {% block nav_item_settings_tree_active %}{% endblock nav_item_settings_tree_active %}">
+                <i class="nav-icon fas fa-tachometer-alt"></i>
+                <p>
+                  Settings
+                  <i class="right fas fa-angle-left"></i>
+                </p>
+              </a>
+              <ul class="nav nav-treeview">
+                <li class="nav-item">
+                  <a href="{% url 'scripts' %}" class="nav-link {% block nav_item_scripts %}{% endblock nav_item_scripts %}">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Scripts</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="{% url 'devices' %}" class="nav-link {% block nav_item_devices %}{% endblock nav_item_devices %}">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Devices</p>
+                  </a>
+                </li>
+              </ul>
+            </li>
+          {% endif %}
         </ul>
       </nav>
       <!-- /.sidebar-menu -->
