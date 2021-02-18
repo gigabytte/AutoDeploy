@@ -28,24 +28,32 @@
       {% block content %}
       
       {% block login_form %}
-      <form action="" method="post">
+      <form action="{% url 'login' %}" method="post">
           {% csrf_token %}
           {% if message %}
               <p class="login-box-msg" style="color: red;">{{ message }}</p>
           {% endif %}
-          <div class="form-group has-feedback">
-              <input name="username" class="form-control" placeholder="Username">
-              <span class="glyphicon glyphicon-user form-control-feedback"></span>
+          <div class="form-group input-group has-feedback">
+              <input  value="{{ form.username.value|default_if_none:'' }}" name="{{ form.username.html_name }}" for="{{ form.username.id_for_label }}" type="text" class="form-control" placeholder="Username">
+              <div class="input-group-append">
+                <div class="input-group-text">
+                  <span class="fas fa-user"></span>
+                </div>
+              </div>
           </div>
-          <div class="form-group has-feedback">
-              <input type="password" name="password" class="form-control" placeholder="Password">
-              <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+          <div class="form-group input-group has-feedback">
+              <input value="{{ form.password.value|default_if_none:'' }}" name="{{ form.password.html_name }}" for="{{ form.password.id_for_label }}" type="password" class="form-control" placeholder="Password">
+              <div class="input-group-append">
+                <div class="input-group-text">
+                  <span class="fas fa-lock"></span>
+                </div>
+              </div>
           </div>
           <div class="row">
             <div class="col-8">
               <a href="{% url 'home' %}" class="text-center">I forgot my password</a>
               <br>
-              <a href="{% url 'signup' %}" class="text-center">Register now!</a>
+              <a href="{% url 'login' %}" class="text-center">Register now!</a>
             </div>
             <!-- /.col -->
             <div class="col-4">

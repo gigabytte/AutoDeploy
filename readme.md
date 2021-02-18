@@ -22,7 +22,7 @@ Super used creds can be found in provided ``` super_user_auth.txt ```
 - [ ] LDAP Integration
 - [ ] Some form of sscript deployment
 - [ ] User Permissions
-- [ ] Dasboard Struture and Flow Design
+- [x] Dasboard Struture and Flow Design, SEMI FINISHED
 
 ## Resources
 Project Followed the [Django Login and Logout Tutorial](https://learndjango.com/tutorials/django-login-and-logout-tutorial) by Will Vincent

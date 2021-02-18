@@ -16,6 +16,66 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+import ldap
+from django_auth_ldap.config import LDAPSearch, GroupOfNamesType, LDAPSearchUnion
+
+# Baseline configuration.
+AUTH_LDAP_SERVER_URI = os.getenv('AUTH_LDAP_SERVER_URI')
+
+AUTH_LDAP_BIND_DN = os.getenv('AUTH_LDAP_BIND_DN')
+AUTH_LDAP_BIND_PASSWORD = os.getenv('AUTH_LDAP_BIND_PASSWORD')
+AUTH_LDAP_USER_SEARCH = LDAPSearchUnion(
+    LDAPSearch(os.getenv('AUTH_LDAP_BASE_DN'),ldap.SCOPE_SUBTREE,'(sAMAccountName=%(user)s)'),
+	)
+	
+# Set up the basic group parameters.
+AUTH_LDAP_GROUP_SEARCH = LDAPSearch(
+    'OU=Users,OU=Capstone,DC=networkinglab,DC=local',
+    ldap.SCOPE_SUBTREE,
+    '(objectClass=user)',
+)
+AUTH_LDAP_GROUP_TYPE = GroupOfNamesType(name_attr='cn')
+
+# Simple group restrictions
+AUTH_LDAP_REQUIRE_GROUP = 'CN=Console Users,OU=Users,OU=Capstone,DC=networkinglab,DC=local'
+
+# Populate the Django user from the LDAP directory.
+AUTH_LDAP_USER_ATTR_MAP = {
+    'first_name': 'givenName',
+    'last_name': 'sn',
+    'email': 'mail',
+}
+
+AUTH_LDAP_USER_FLAGS_BY_GROUP = {
+    'is_active': os.getenv('LDAP_IS_ACTIVE'),
+    'is_staff': os.getenv('LDAP_IS_STAFF'),
+    'is_superuser': os.getenv('LDAP_IS_SUPERUSER'),
+}
+
+
+# This is the default, but I like to be explicit.
+AUTH_LDAP_ALWAYS_UPDATE_USER = True
+
+# Use LDAP group membership to calculate group permissions.
+AUTH_LDAP_FIND_GROUP_PERMS = True
+
+# Cache distinguished names and group memberships for an hour to minimize
+# LDAP traffic.
+AUTH_LDAP_CACHE_TIMEOUT = 3600
+
+# Keep ModelBackend around for per-user permissions and maybe a local
+# superuser.
+AUTHENTICATION_BACKENDS = (
+    'django_auth_ldap.backend.LDAPBackend',
+    #'django.contrib.auth.backends.ModelBackend',
+)
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "handlers": {"console": {"class": "logging.StreamHandler"}},
+    "loggers": {"django_auth_ldap": {"level": "DEBUG", "handlers": ["console"]}},
+}
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -30,7 +90,7 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -68,7 +128,6 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                #'accounts.context_processors.dashboard_base_context_var',
             ],
         },
     },
