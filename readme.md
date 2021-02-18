@@ -18,10 +18,14 @@ Due to security concerns a ``` .env ``` file must be used in order to provide se
 Super used creds can be found in provided ``` super_user_auth.txt ```
 
 ## To Do
-- [ ] AdminLTE Integration
-- [ ] LDAP Integration
-- [ ] Some form of sscript deployment
-- [ ] User Permissions
+- [x] AdminLTE Integration
+- [x] LDAP Integration
+- [ ] Some form of script deployment
+- [ ] User Permissions (ie. who can access what devices and scripts)
+- [ ] Device creation, deletion and editing
+- [ ] Script creation, deletion and editing
+- [ ] Profile page
+- [ ] VBS script deployment (ie complex scripts)
 - [x] Dasboard Struture and Flow Design, SEMI FINISHED
 
 ## Resources
