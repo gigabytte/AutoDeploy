@@ -1,5 +1,5 @@
 from django import forms
-from .models import Console
+from .models import Console, Device
 
 class RegisterForm(forms.Form):
     username = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control'}))
@@ -30,19 +30,17 @@ class DeleteConsoleForm(forms.ModelForm):
         model = Console
         fields = ['console_name']
 
-class GetConsoleDetails(forms.ModelForm):
+class AddDeviceForm(forms.ModelForm):
     class Meta:
-        model = Console
-        fields = ['console_name']
+        model = Device
+        fields = ['device_name', 'pod_location', 'pod_number', 'device_ip_address', 'device_mac_address', 'device_note']
 
-class AddDeviceForm(forms.Form):
-    device_name = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control'}))
-    device_type = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control'}))
-    pod_number = forms.IntegerField(widget=forms.TextInput(attrs={'class':'form-control'}))
-    ip_address = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control'}))
-    is_staff = forms.BooleanField(widget=forms.TextInput(attrs={'class':'form-control'}))
-    device_note = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control'}))
+class EditDeviceForm(forms.ModelForm):
+    class Meta:
+        model = Device
+        fields = ['id', 'device_name', 'pod_location', 'pod_number', 'device_ip_address', 'device_mac_address', 'device_note']
 
-class DeletDeviceForm(forms.Form):
-    device_id = forms.IntegerField(widget=forms.TextInput(attrs={'class':'form-control'}))
-    device_note = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control'}))
+class DeleteDeviceForm(forms.ModelForm):
+    class Meta:
+        model = Device
+        fields = ['device_name']
