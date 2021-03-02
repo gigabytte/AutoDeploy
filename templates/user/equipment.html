@@ -4,7 +4,7 @@
 <html lang="en">
 <head>
   {% block head %}
-    <title>{% block title %}Equipment Settings{% endblock %}</title>  
+    <title>{% block title %}Windows Device Settings{% endblock %}</title>  
   {% endblock %}
   <!-- iCheck for checkboxes and radio inputs -->
   <link rel="stylesheet" href="{% static 'plugins/icheck-bootstrap/icheck-bootstrap.min.css' %}">
@@ -39,78 +39,12 @@
       <!-- Main content -->
       <section class="content">
         <div class="row">
+
+          <!-- Add device section -->
           <div class="col-md-6">
             <div class="card card-primary">
               <div class="card-header">
-                <h3 class="card-title">Add Device</h3>
-  
-                <div class="card-tools">
-                  <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
-                    <i class="fas fa-minus"></i>
-                  </button>
-                </div>
-              </div>
-              <form action="{% url 'equipment' %}" method="post"></form>
-                <div class="card-body">
-                  <div class="form-group">
-                    <label for="inputName">Device Name</label>
-                    <input type="text" id="inputName" class="form-control" value="">
-                  </div>
-                  <div class="form-group">
-                    <label for="inputStatus">Device Type</label>
-                    <select id="inputStatus" class="form-control custom-select">
-                      <option disabled>Select one</option>
-                      <option selected>Cisco Switch</option>
-                      <option>Cisco Router</option>
-                      <option>Windows Device</option>
-                    </select>
-                  </div>
-                  <div class="form-group">
-                    <label for="inputStatus">Select Pod</label>
-                    <select id="inputStatus" class="form-control custom-select">
-                      <option disabled>Select one</option>
-                      <option selected>1</option>
-                      <option>2</option>
-                      <option>3</option>
-                      <option>4</option>
-                      <option>5</option>
-                      <option>6</option>
-                      <option>7</option>
-                      <option>8</option>
-                    </select>
-                  </div>
-                  <!-- IP address -->
-                  <div class="form-group">
-                    <label>IP Address:</label>
-
-                    <div class="input-group">
-                      <div class="input-group-prepend">
-                        <span class="input-group-text"><i class="fas fa-laptop"></i></span>
-                      </div>
-                      <input type="text" class="form-control" data-inputmask="'alias': 'ip'" data-mask>
-                    </div>
-                    <!-- /.input group -->
-                  </div>
-                  <div class="icheck-primary d-inline">
-                    <input type="checkbox" id="checkboxPrimary1">
-                    <label for="checkboxPrimary1">
-                      Allow Staff Account Access to Device
-                    </label>
-                  </div>
-                  <div class="form-group">
-                    <label for="inputDescription">Device Note</label>
-                    <textarea id="inputDescription" class="form-control" rows="4"></textarea>
-                  </div>
-                </div>
-            </form>
-              <!-- /.card-body -->
-            </div>
-            <!-- /.card -->
-          </div>
-          <div class="col-md-6">
-            <div class="card card-danger">
-              <div class="card-header">
-                <h3 class="card-title">Delete Device</h3>
+                <h3 class="card-title">Add Windows Device</h3>
   
                 <div class="card-tools">
                   <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
@@ -119,29 +53,204 @@
                 </div>
               </div>
               <div class="card-body">
-                <div class="form-group">
-                  <label for="inputStatus">Device Type</label>
-                  <select id="inputStatus" class="form-control custom-select">
-                    <!-- NOTE** dump from database listing pods  -->
-                    <option disabled>Select one</option>
-                    <option selected>Cisco Switch</option>
-                    <option>Cisco Router</option>
-                    <option>Windows Device</option>
-                  </select>
-                </div>
-                <div class="form-group">
-                    <label for="inputStatus">Select Device</label>
-                    <select id="inputStatus" class="form-control custom-select">
+                <form method="post">
+                  {% csrf_token %}
+                  <label for="inputName">Windows Device Name</label>
+                  <div class="form-group input-group has-feedback">
+                    <input name="device_name" type="text" class="form-control">
+                  </div>
+                  <label for="inputStatus">Pod Location</label>
+                  <div class="form-group input-group has-feedback">
+    
+                    <select id="inputStatus" name="pod_location" type="text" class="form-control custom-select">
                         <!-- NOTE** dump from database listing pods  -->
                       <option disabled>Select one</option>
-                      <option selected>Pod 1</option>
-                      <option>Pod 2</option>
-                      <option>Pod 3</option>
+                      <option value='0'>Networking Lab</option>
+                      <option value='1'>Datacenter</option>
                     </select>
                   </div>
+                  <label for="inputEstimatedBudget">Pod Number</label>
+                  <div class="form-group input-group has-feedback">
+                      <input  placeholder="0" step="1" min="0" name="pod_number" type="number" id="inputEstimatedBudget" class="form-control">
+                  </div>
+                  <!-- IP address -->
+                  <label>IP Address</label>
+
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text"><i class="fas fa-location-arrow"></i></span>
+                    </div>
+                    <input type="text" name="device_ip_address" class="form-control" data-inputmask="'alias': 'ip'" data-mask>
+                  </div>
+                  </br>
+                  <!-- MAC address -->
+                  <label>MAC Address</label>
+
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text"><i class="fas fa-laptop"></i></span>
+                    </div>
+                    <input type="text" name="device_mac_address" class="form-control" data-inputmask="'alias': 'mac'" data-mask>
+                  </div>
+                    <!-- /.input group -->
+                  <br>
+                  <label for="inputDescription">Device Note</label>
+                  <div class="form-group input-group has-feedback">
+                    <textarea maxlength="100" name="device_note" type="text" class="form-control" rows="4"></textarea>
+                  </div>
+                  <button name="add_device" type="submit" class="btn btn-block btn-primary btn-lg">Add Device</button>
+                </form>
+              </div>
+              <!-- /.card-body -->
+              
+            </div>
+            <!-- /.card -->
+          </div>
+
+          <!-- Edit console section -->
+          <div class="col-md-6">
+            <div class="card card-info">
+              <div class="card-header">
+                <h3 class="card-title">Edit Windows Device</h3>
+  
+                <div class="card-tools">
+                  <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+                    <i class="fas fa-minus"></i>
+                  </button>
+                </div>
+              </div>
+              <div class="card-body">
+                <form method="get">
+
+                  <label for="inputStatus">Select Device</label>
+                  <select onchange="this.form.submit()" id="device_id" name="device_name" class="form-control custom-select">
+                      <!-- NOTE** dump from database listing pods  -->
+                    <option selected disabled>Select one</option>
+                    {% if device_list %}
+                      {% for device in device_list %}
+                        {% if device_details.id == device.id %}
+                          <option selected value="{{ device.id }}">{{ device.device_name }} (Pod #{{ device.pod_number }} - {% if device.pod_location is 0 %} Networking Lab {% else %}DataCenter{% endif %})</option>
+                        {% else %}
+                          <option value="{{ device.id }}">{{ device.device_name }} (Pod #{{ device.pod_number }} - {% if device.pod_location is 0 %} Networking Lab {% else %}DataCenter{% endif %})</option>
+                        {% endif %}
+                      {% endfor %}
+                    {% else %}
+                      <option disabled>No Devices Available</option>
+                    {% endif %}
+                  </select>
+                  <noscript><input type="submit" value="Submit" name="get_device_detail"></noscript>
+                </form>
+                <form method="post">
+                  {% csrf_token %}
+                  
+                  <label name="id" value="{{ device_details.id }}" for="inputName">Console Manager Name</label>
+                  <div class="form-group input-group has-feedback">
+                    <input name="device_name" type="text" value="{{ device_details.device_name }}"class="form-control">
+                  </div>
+                  <label for="inputStatus">Pod Location</label>
+                  <div class="form-group input-group has-feedback">
+    
+                    <select id="inputStatus" name="pod_location" type="text" class="form-control custom-select">
+                      <option disabled>Select one</option>
+                      {% if device_details.pod_location is 0 %} 
+                        <option selected value='0'>Networking Lab</option>
+                      {% else %}
+                        <option value='0'>Networking Lab</option>
+                      {% endif %}
+                      {% if device_details.pod_location is 1 %} 
+                        <option selected value='1'>Datacenter</option>
+                      {% else %}
+                        <option value='1'>Datacenter</option>
+                      {% endif %}
+                    </select>
+                  </div>
+                  <label for="inputEstimatedBudget">Pod Number</label>
+                  <div class="form-group input-group has-feedback">
+                      <input value="{{ device_details.pod_number }}" placeholder="0" step="1" min="0" name="pod_number" type="number" id="inputEstimatedBudget" class="form-control">
+                  </div>
+                  <!-- IP address -->
+                  <label>IP Address</label>
+
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text"><i class="fas fa-location-arrow"></i></span>
+                    </div>
+                    <input value="{{ device_details.device_ip_address }}" type="text" name="device_ip_address" class="form-control" data-inputmask="'alias': 'ip'" data-mask>
+                  </div>
+                  </br>
+                  <!-- MAC address -->
+                  <label>MAC Address</label>
+
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text"><i class="fas fa-laptop"></i></span>
+                    </div>
+                    <input value="{{ device_details.device_mac_address }}" type="text" name="device_mac_address" class="form-control" data-inputmask="'alias': 'mac'" data-mask>
+                  </div>
+                    <!-- /.input group -->
+                  <br>
+                  <label for="inputDescription">Device Note</label>
+                  <div class="form-group input-group has-feedback">
+                    <textarea maxlength="100" name="device_note" type="text" class="form-control" rows="4">{{ device_details.device_note }}</textarea>
+                  </div>
+                  <button type="button" class="btn btn-block btn-info btn-lg" data-toggle="modal" data-target="#modal-edit-device">Edit Device</button>
+                  <div class="modal fade" id="modal-edit-device">
+                    <div class="modal-dialog">
+                      <div class="modal-content bg-info">
+                        <div class="modal-header">
+                          <h4 class="modal-title">Edit Device</h4>
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+                        <div class="modal-body">
+                          <p>Confirm you would like to edit this Windows Device?</p>
+                        </div>
+                        <div class="modal-footer justify-content-between">
+                          <button type="button" class="btn btn-outline-light" data-dismiss="modal">Close</button>
+                          <button name="edit_device" type="submit" class="btn btn-outline-light">Confirm</button>
+                        </div>
+                      </div>
+                      <!-- /.modal-content -->
+                    </div>
+                    <!-- /.modal-dialog -->
+                  </div>
+                </form>
+              </div>
+              <!-- /.card-body -->
+              
+            </div>
+            <!-- /.card -->
+          </div>
+
+          <!-- delete console section -->
+          <div class="col-md-6">
+            <div class="card card-danger">
+              <div class="card-header">
+                <h3 class="card-title">Delete Windows Device</h3>
+  
+                <div class="card-tools">
+                  <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+                    <i class="fas fa-minus"></i>
+                  </button>
+                </div>
+              </div>
+              <div class="card-body">
+                <form method="post">
+                  {% csrf_token %}
                   <div class="form-group">
-                    <label for="inputDescription">Reason for Deletion</label>
-                    <textarea id="inputDescription" class="form-control" rows="4"></textarea>
+                    <label for="inputStatus">Select Device</label>
+                    <select id="device_id" name="device_name" class="form-control custom-select">
+                        <!-- NOTE** dump from database listing pods  -->
+                      <option disabled>Select one</option>
+                      {% if device_list %}
+                        {% for device in device_list %}
+                        <option value="{{ device.id }}">{{ device.device_name }} (Pod #{{ device.pod_number }} - {% if device.pod_location is 0 %} Networking Lab {% else %}DataCenter{% endif %})</option>
+                        {% endfor %}
+                      {% else %}
+                        <option disabled>No Devices Available</option>
+                      {% endif %}
+                    </select>
                   </div>
                   <button type="button" class="btn btn-block btn-danger btn-lg" data-toggle="modal" data-target="#modal-delete-device">Delete Device</button>
                   <div class="modal fade" id="modal-delete-device">
@@ -154,23 +263,23 @@
                           </button>
                         </div>
                         <div class="modal-body">
-                          <p>Confirm you would like to delete Device #xyz</p>
+                          <p>Confirm you would like delete this Windows Device?</p>
                         </div>
                         <div class="modal-footer justify-content-between">
                           <button type="button" class="btn btn-outline-light" data-dismiss="modal">Close</button>
-                          <button type="button" class="btn btn-outline-light">Confirm</button>
+                          <button name="delete_device" type="submit" class="btn btn-outline-light">Confirm</button>
                         </div>
                       </div>
                       <!-- /.modal-content -->
                     </div>
                     <!-- /.modal-dialog -->
                   </div>
+                </form>
               </div>
               <!-- /.card-body -->
             </div>
- 
-            <!-- /.card -->
-          </div>
+
+        </div>
           
         </section>
   <!-- /.content -->
@@ -185,11 +294,39 @@
 <script src="{% static 'plugins/moment/moment.min.js' %}"></script>
 <script src="{% static 'plugins/inputmask/jquery.inputmask.min.js' %}"></script>
 
+<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/css/toastr.css" rel="stylesheet"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/js/toastr.js"></script>
+
 <script>
   $(function () {
     $('[data-mask]').inputmask()
   });
+
+  $(function () {
+    $('[data-mask]').inputmask()
+  });
+
+  toastr.options = {
+    "closeButton": true,
+    "timeOut": "4000",
+    "extendedTimeOut": "2000",
+}
 </script>
+
+{% if messages %}
+{% for message in messages %}
+    {% if message.tags == 'success'%}
+      <script type=text/javascript>toastr.{{ message.tags }}('{{ message }}')</script>
+    {% elif message.tags == 'info' %}
+        <script type=text/javascript>toastr.{{ message.tags }}('{{ message }}')</script>
+    {% elif message.tags == 'warning' %}
+        <script type=text/javascript>toastr.{{ message.tags }}('{{ message }}')</script>
+    {% elif message.tags == 'error' %}
+        <script type=text/javascript>toastr.{{ message.tags }}('{{ message }}')</script>
+    {% endif %}
+{% endfor %}
+{% endif %}
 
 <!-- /.control-sidebar -->
 {% endblock %}

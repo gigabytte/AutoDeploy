@@ -1,4 +1,4 @@
-from accounts.models import Console
+from accounts.models import Console, Device
 from django.shortcuts import render, redirect
 from django.views import generic, View
 from django.views.generic import TemplateView
@@ -7,7 +7,7 @@ from django.contrib.auth.models import User
 from django.http import HttpResponse
 from django.shortcuts import HttpResponseRedirect
 from django.template import loader
-from .forms import RegisterForm, LoginForm, AddDeviceForm, AddConsoleForm, DeleteConsoleForm, EditConsoleForm, GetConsoleDetails
+from .forms import RegisterForm, LoginForm, AddDeviceForm, AddConsoleForm, DeleteConsoleForm, EditConsoleForm, AddDeviceForm, EditDeviceForm, DeleteDeviceForm
 from django.template.response import TemplateResponse
 from django_auth_ldap.backend import LDAPBackend
 from django.contrib.auth.mixins import UserPassesTestMixin, LoginRequiredMixin
@@ -161,16 +161,105 @@ class Windows(LoginRequiredMixin, View):
         return TemplateResponse(request, template, args)
 
 @superuser_required()
-class Equipment(LoginRequiredMixin, View):
+class Equipment(LoginRequiredMixin, generic.ListView):
 
     login_url = '/login/'
     redirect_field_name = 'redirect_to'
 
-    def get(self, request):
-        args = {}
+    template_name = 'user/equipment.html'
+    model = Device
+    
+    def get_queryset(self):
+     
+        if self.request.GET.get('device_name'):
+            self.selectedDeviceDetails = self.model.objects.get(pk=self.request.GET.get('device_name'))
+        return self.model.objects.all()
 
-        template = loader.get_template('user/equipment.html')
-        return TemplateResponse(request, template, args)
+    def get_context_data(self, **kwargs):
+        kwargs = super().get_context_data(**kwargs)
+
+        if self.request.GET.get('device_name'):
+            kwargs['device_details'] = self.selectedDeviceDetails
+        if 'add_device' not in kwargs:
+            kwargs['add_device'] = AddDeviceForm()
+        if 'delete_device' not in kwargs:
+            kwargs['delete_device'] = DeleteDeviceForm()
+        if 'edit_device' not in kwargs:
+            kwargs['edit_device'] = EditDeviceForm()
+        
+        return kwargs
+
+    def post(self, request, *args, **kwargs):
+        ctxt = {}
+        if 'add_device' in request.POST:
+            addDeviceForm = AddDeviceForm(request.POST)
+            if addDeviceForm.is_valid():
+
+                podNumberSelected = addDeviceForm.cleaned_data['pod_number']
+                podLocationSelected = addDeviceForm.cleaned_data['pod_location']
+                deviceIPAdressAdded = addDeviceForm.cleaned_data['device_ip_address']
+                deviceMACAdressAdded = addDeviceForm.cleaned_data['device_mac_address']
+                read_podLocationSelected = 'Networking Lab' if podLocationSelected == 0 else 'Datacenter'
+   
+                if not self.model.objects.filter(pod_number=podNumberSelected).filter(pod_location=podLocationSelected):
+                    print('Added new Console to DB')
+                    if not self.model.objects.filter(device_ip_address=deviceIPAdressAdded).filter(pod_location=podLocationSelected):
+                        if not self.model.objects.filter(device_mac_address=deviceMACAdressAdded).filter(pod_location=podLocationSelected):
+                            addDeviceForm.save()
+                            messages.success(request, 'Successfully added new Device')
+                        else:
+                            messages.info(request, 'Deteted Duplicate MAC Address with another Device, please try again')
+                            print('Failure to perform request, possible duplicate Device MAC Address')                        
+                    else:
+                        messages.info(request, 'Deteted Duplicate IP Address with another Device, please try again')
+                        print('Failure to perform request, possible duplicate Device IP Address')
+                else:
+                    print('Unable to process Device Add Request due to possible duplicate entry problem')
+                    messages.info(request, 'A Device is already asscoaited with Pod Number %s Located in %s , please try again or delete old Device first.' % (podNumberSelected, read_podLocationSelected))
+            else:
+                print('invalid Device form')
+                messages.error(request, 'Form Error please Try Again!')
+                return redirect('equipment')
+
+        elif 'delete_device' in request.POST:
+            deleteDeviceForm = DeleteDeviceForm(request.POST)
+
+            if deleteDeviceForm.is_valid():
+                deviceID = deleteDeviceForm.cleaned_data['device_name']
+
+                self.model.objects.filter(id=deviceID).delete()
+
+                messages.success(request, 'Successfully deleted Device')
+                print('Successfuly Device console')
+
+            else:
+                print('delete Device not valid')
+                messages.error(request, 'Form Error please Try Again!')
+                return redirect('equipment')
+
+        elif 'edit_device' in request.POST:
+            editDeviceForm = EditDeviceForm(request.POST)
+
+            if editDeviceForm.is_valid():
+                editDeviceObject = self.model.objects.get(id=self.request.GET.get('device_name'))
+                editDeviceObject.device_name = editDeviceForm.cleaned_data['device_name']
+                editDeviceObject.pod_number = editDeviceForm.cleaned_data['pod_number']
+                editDeviceObject.pod_location = editDeviceForm.cleaned_data['pod_location']
+                editDeviceObject.device_ip_address = editDeviceForm.cleaned_data['device_ip_address']
+                editDeviceObject.device_mac_address = editDeviceForm.cleaned_data['device_mac_address']
+                editDeviceObject.device_note = editDeviceForm.cleaned_data['device_note']
+
+                editDeviceObject.save()
+
+                messages.success(request, 'Successfully edited Device')
+                print('Successfuly edited device')
+
+            else:
+                print('edit device not valid')
+                messages.error(request, 'Form Error please Try Again!')
+                return redirect('equipment')
+
+        return redirect('equipment')
 
 @superuser_required()
 class Console(LoginRequiredMixin, generic.ListView):
