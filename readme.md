@@ -5,7 +5,7 @@
 
     -  Install pipenv ``` pip install pipenv ```
     - Enter virtual env ``` pipenv shell ```
-    - Start server ``` python manage.py runserver ```
+    - Start server ``` python manage.py runserver 0.0.0.0:8000 ```
 
 ## Deployment - Enviroment Variables
 Due to security concerns a ``` .env ``` file must be used in order to provide secret keys and databse login creds in order for the server to function. The [python-dotenv](https://pypi.org/project/python-dotenv/) package is used to read in the env vars into the django project.
@@ -20,11 +20,12 @@ Super used creds can be found in provided ``` super_user_auth.txt ```
 ## To Do
 - [x] AdminLTE Integration
 - [x] LDAP Integration
-- [ ] Some form of script deployment
-- [ ] User Permissions (ie. who can access what devices and scripts)
-- [ ] Device creation, deletion and editing
-- [ ] Script creation, deletion and editing
-- [ ] Profile page
+- [x] Console creation, deletion and editing
+- [ ] Windows Device creation, deletion and editing (In Dev)
+- [ ] Script creation, deletion and editing (In Dev)
+- [ ] User Permissions (ie. who can access what devices and scripts) (In Dev)
+- [ ] Script deployment backend for consoles
+- [ ] Script deployment backend for windows devices (ie. basic commands)
 - [ ] VBS script deployment (ie complex scripts)
 - [x] Dasboard Struture and Flow Design, SEMI FINISHED
 
