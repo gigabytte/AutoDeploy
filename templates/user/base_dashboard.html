@@ -14,6 +14,13 @@
     <link rel="stylesheet" href="{% static 'dist/css/adminlte.min.css' %}">
     <!-- Google Font: Source Sans Pro -->
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+
+    <!-- jQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <!-- Bootstrap 4 -->
+    <script src="{% static 'plugins/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+    <!-- AdminLTE App -->
+    <script src="{% static 'dist/js/adminlte.min.js' %}"></script>
   <meta charset="utf-8">
 
   {% block head %}
@@ -117,7 +124,7 @@
           {% if request.user.is_superuser %}
             <li class="nav-item has-treeview {% block nav_item_settings_tree_menu %}{% endblock nav_item_settings_tree_menu %}">
               <a href="" class="nav-link {% block nav_item_settings_tree_active %}{% endblock nav_item_settings_tree_active %}">
-                <i class="nav-icon fas fa-tachometer-alt"></i>
+                <i class="nav-icon fas fa-cogs"></i>
                 <p>
                   Settings
                   <i class="right fas fa-angle-left"></i>
@@ -126,16 +133,38 @@
               <ul class="nav nav-treeview">
                 <li class="nav-item">
                   <a href="{% url 'scripts' %}" class="nav-link {% block nav_item_scripts %}{% endblock nav_item_scripts %}">
-                    <i class="far fa-circle nav-icon"></i>
+                    <i class="fas fa-scroll nav-icon"></i>
                     <p>Scripts</p>
                   </a>
                 </li>
-                <li class="nav-item">
-                  <a href="{% url 'devices' %}" class="nav-link {% block nav_item_devices %}{% endblock nav_item_devices %}">
-                    <i class="far fa-circle nav-icon"></i>
-                    <p>Devices</p>
+              </ul>
+              <ul class="nav nav-treeview">
+                <li class="nav-item {% block nav_item_devices_tree_menu %}{% endblock nav_item_devices_tree_menu %}">
+                  <a href="" class="nav-link {% block nav_item_devices_tree_active %}{% endblock nav_item_devices_tree_active %}">
+                    <i class="fas fa-network-wired nav-icon"></i>
+                    <p>
+                      Devices
+                      <i class="right fas fa-angle-left"></i>
+                    </p>
                   </a>
+                  <ul class="nav-item nav-treeview">
+                    <li class="nav-item">
+                      <a href="{% url 'console' %}" class="nav-link {% block nav_item_console %}{% endblock nav_item_console %}">
+                        <i class="far fa-dot-circle nav-icon"></i>
+                        <p>Console Managers</p>
+                      </a>
+                    </li>
+                    <li class="nav-item">
+                      <a href="{% url 'equipment' %}" class="nav-link {% block nav_item_equipment %}{% endblock nav_item_equipment %}">
+                        <i class="far fa-dot-circle nav-icon"></i>
+                        <p>Equipment</p>
+                      </a>
+                    </li>
+                  </ul>
                 </li>
+              </ul>
+
+                
               </ul>
             </li>
           {% endif %}
@@ -152,12 +181,7 @@
 
 <!-- REQUIRED SCRIPTS -->
 
-<!-- jQuery -->
-<script src="{% static 'plugins/jquery/jquery.min.js' %}"></script>
-<!-- Bootstrap 4 -->
-<script src="{% static 'plugins/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
-<!-- AdminLTE App -->
-<script src="{% static 'dist/js/adminlte.min.js' %}"></script>
+
 </body>
 <!-- Main Footer -->
 <footer class="main-footer">

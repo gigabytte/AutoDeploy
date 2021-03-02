@@ -1,0 +1,318 @@
+{% extends 'user/base_dashboard.html' %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  {% block head %}
+    <title>{% block title %}Pod Settings{% endblock %}</title>  
+
+  {% endblock %}
+
+      <!-- SweetAlert2 -->
+      <link rel="stylesheet" href="{% static 'plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css' %}">
+      <!-- iCheck for checkboxes and radio inputs -->
+      <link rel="stylesheet" href="{% static 'plugins/icheck-bootstrap/icheck-bootstrap.min.css' %}">
+      <!-- Toastr -->
+       
+      
+
+</head>
+{% block nav_item_console %}active{% endblock nav_item_console %}
+{% block nav_item_settings_tree_menu %}menu-open{% endblock nav_item_settings_tree_menu %}
+{% block nav_item_settings_tree_active %}active{% endblock nav_item_settings_tree_active %}
+{% block nav_item_devices_tree_menu %}menu-open{% endblock nav_item_devices_tree_menu %}
+{% block nav_item_devices_tree_active %}active{% endblock nav_item_devices_tree_active %}
+{% block content %}
+
+
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+  <!-- Content Header (Page header) -->
+  <section class="content-header">
+    <div class="container-fluid">
+
+     
+      <div class="row mb-2">
+        <div class="col-sm-6">
+          <h1>Console Manager Settings</h1>
+        </div>
+        <div class="col-sm-6">
+          <ol class="breadcrumb float-sm-right">
+            <li class="breadcrumb-item"><a href="{% url 'dashboard' %}">Dashboard</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'scripts' %}">Settings</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'console' %}">Devices</a></li>
+            <li class="breadcrumb-item active">Console Managers</li>
+          </ol>
+        </div>
+      </div>
+    </div><!-- /.container-fluid -->
+  </section>
+      <!-- Main content -->
+      <section class="content">
+        <div class="row">
+          <!-- Add console section -->
+          <div class="col-md-6">
+            <div class="card card-primary">
+              <div class="card-header">
+                <h3 class="card-title">Add Console Manager</h3>
+  
+                <div class="card-tools">
+                  <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+                    <i class="fas fa-minus"></i>
+                  </button>
+                </div>
+              </div>
+              <div class="card-body">
+                <form method="post">
+                  {% csrf_token %}
+                  <label for="inputName">Console Manager Name</label>
+                  <div class="form-group input-group has-feedback">
+                    <input name="console_name" type="text" class="form-control">
+                  </div>
+                  <label for="inputStatus">Pod Location</label>
+                  <div class="form-group input-group has-feedback">
+    
+                    <select id="inputStatus" name="pod_location" type="text" class="form-control custom-select">
+                        <!-- NOTE** dump from database listing pods  -->
+                      <option disabled>Select one</option>
+                      <option value='0'>Networking Lab</option>
+                      <option value='1'>Datacenter</option>
+                    </select>
+                  </div>
+                  <label for="inputEstimatedBudget">Pod Number</label>
+                  <div class="form-group input-group has-feedback">
+                      <input  placeholder="0" step="1" min="0" name="pod_number" type="number" id="inputEstimatedBudget" class="form-control">
+                  </div>
+                  <!-- IP address -->
+                  <label>IP Address</label>
+
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text"><i class="fas fa-laptop"></i></span>
+                    </div>
+                    <input type="text" name="console_ip_address" class="form-control" data-inputmask="'alias': 'ip'" data-mask>
+                  </div>
+                    <!-- /.input group -->
+                  <br>
+                  <label for="inputDescription">Console Note</label>
+                  <div class="form-group input-group has-feedback">
+                    <textarea maxlength="100" name="console_note" type="text" class="form-control" rows="4"></textarea>
+                  </div>
+                  <button name="add_console" type="submit" class="btn btn-block btn-primary btn-lg">Add Console</button>
+                </form>
+              </div>
+              <!-- /.card-body -->
+              
+            </div>
+            <!-- /.card -->
+          </div>
+
+          <!-- Edit console section -->
+          <div class="col-md-6">
+            <div class="card card-info">
+              <div class="card-header">
+                <h3 class="card-title">Edit Console Manager</h3>
+  
+                <div class="card-tools">
+                  <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+                    <i class="fas fa-minus"></i>
+                  </button>
+                </div>
+              </div>
+              <div class="card-body">
+                <form method="get">
+
+                  <label for="inputStatus">Select Console</label>
+                  <select onchange="this.form.submit()" id="console_id" name="console_name" class="form-control custom-select">
+                      <!-- NOTE** dump from database listing pods  -->
+                    <option selected disabled>Select one</option>
+                    {% if console_list %}
+                      {% for console in console_list %}
+                        {% if console_details.id == console.id %}
+                          <option selected value="{{ console.id }}">{{ console.console_name }} (Pod #{{ console.pod_number }} - {% if console.pod_location is 0 %} Networking Lab {% else %}DataCenter{% endif %})</option>
+                        {% else %}
+                          <option value="{{ console.id }}">{{ console.console_name }} (Pod #{{ console.pod_number }} - {% if console.pod_location is 0 %} Networking Lab {% else %}DataCenter{% endif %})</option>
+                        {% endif %}
+                      {% endfor %}
+                    {% else %}
+                      <option disabled>No Consoles Available</option>
+                    {% endif %}
+                  </select>
+                  <noscript><input type="submit" value="Submit" name="get_console_detail"></noscript>
+                </form>
+                <form method="post">
+                  {% csrf_token %}
+                  
+                  <label name="id" value="{{ console_details.id }}" for="inputName">Console Manager Name</label>
+                  <div class="form-group input-group has-feedback">
+                    <input name="console_name" type="text" value="{{ console_details.console_name }}"class="form-control">
+                  </div>
+                  <label for="inputStatus">Pod Location</label>
+                  <div class="form-group input-group has-feedback">
+    
+                    <select id="inputStatus" name="pod_location" type="text" class="form-control custom-select">
+                      <option disabled>Select one</option>
+                      {% if console_details.pod_location is 0 %} 
+                        <option selected value='0'>Networking Lab</option>
+                      {% else %}
+                        <option value='0'>Networking Lab</option>
+                      {% endif %}
+                      {% if console_details.pod_location is 1 %} 
+                        <option selected value='1'>Datacenter</option>
+                      {% else %}
+                        <option value='1'>Datacenter</option>
+                      {% endif %}
+                    </select>
+                  </div>
+                  <label for="inputEstimatedBudget">Pod Number</label>
+                  <div class="form-group input-group has-feedback">
+                      <input value="{{ console_details.pod_number }}" placeholder="0" step="1" min="0" name="pod_number" type="number" id="inputEstimatedBudget" class="form-control">
+                  </div>
+                  <!-- IP address -->
+                  <label>IP Address</label>
+
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text"><i class="fas fa-laptop"></i></span>
+                    </div>
+                    <input value="{{ console_details.console_ip_address }}" type="text" name="console_ip_address" class="form-control" data-inputmask="'alias': 'ip'" data-mask>
+                  </div>
+                    <!-- /.input group -->
+                  <br>
+                  <label for="inputDescription">Console Note</label>
+                  <div class="form-group input-group has-feedback">
+                    <textarea maxlength="100" name="console_note" type="text" class="form-control" rows="4">{{ console_details.console_note }}</textarea>
+                  </div>
+                  <button type="button" class="btn btn-block btn-info btn-lg" data-toggle="modal" data-target="#modal-edit-pod">Edit Console</button>
+                  <div class="modal fade" id="modal-edit-pod">
+                    <div class="modal-dialog">
+                      <div class="modal-content bg-info">
+                        <div class="modal-header">
+                          <h4 class="modal-title">Edit Console</h4>
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+                        <div class="modal-body">
+                          <p>Confirm you would like to edit this Console?</p>
+                        </div>
+                        <div class="modal-footer justify-content-between">
+                          <button type="button" class="btn btn-outline-light" data-dismiss="modal">Close</button>
+                          <button name="edit_console" type="submit" class="btn btn-outline-light">Confirm</button>
+                        </div>
+                      </div>
+                      <!-- /.modal-content -->
+                    </div>
+                    <!-- /.modal-dialog -->
+                  </div>
+                </form>
+              </div>
+              <!-- /.card-body -->
+              
+            </div>
+            <!-- /.card -->
+          </div>
+
+          <!-- delete console section -->
+          <div class="col-md-6">
+            <div class="card card-danger">
+              <div class="card-header">
+                <h3 class="card-title">Delete Console</h3>
+  
+                <div class="card-tools">
+                  <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+                    <i class="fas fa-minus"></i>
+                  </button>
+                </div>
+              </div>
+              <div class="card-body">
+                <form method="post">
+                  {% csrf_token %}
+                  <div class="form-group">
+                    <label for="inputStatus">Select Console</label>
+                    <select id="console_id" name="console_name" class="form-control custom-select">
+                        <!-- NOTE** dump from database listing pods  -->
+                      <option disabled>Select one</option>
+                      {% if console_list %}
+                        {% for console in console_list %}
+                        <option value="{{ console.id }}">{{ console.console_name }} (Pod #{{ console.pod_number }} - {% if console.pod_location is 0 %} Networking Lab {% else %}DataCenter{% endif %})</option>
+                        {% endfor %}
+                      {% else %}
+                        <option disabled>No Consoles Available</option>
+                      {% endif %}
+                    </select>
+                  </div>
+                  <button type="button" class="btn btn-block btn-danger btn-lg" data-toggle="modal" data-target="#modal-delete-pod">Delete Console</button>
+                  <div class="modal fade" id="modal-delete-pod">
+                    <div class="modal-dialog">
+                      <div class="modal-content bg-danger">
+                        <div class="modal-header">
+                          <h4 class="modal-title">Delete Console</h4>
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+                        <div class="modal-body">
+                          <p>Confirm you would like delete this Console?</p>
+                        </div>
+                        <div class="modal-footer justify-content-between">
+                          <button type="button" class="btn btn-outline-light" data-dismiss="modal">Close</button>
+                          <button name="delete_console" type="submit" class="btn btn-outline-light">Confirm</button>
+                        </div>
+                      </div>
+                      <!-- /.modal-content -->
+                    </div>
+                    <!-- /.modal-dialog -->
+                  </div>
+                </form>
+              </div>
+              <!-- /.card-body -->
+            </div>
+ 
+            <!-- /.card -->
+          </div>
+          
+        </section>
+  <!-- /.content -->
+</div>
+
+<!-- Control Sidebar -->
+<aside class="control-sidebar control-sidebar-dark">
+<!-- Control sidebar content goes here -->
+</aside>
+<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/css/toastr.css" rel="stylesheet"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/js/toastr.js"></script>
+<!-- InputMask -->
+<script src="{% static 'plugins/moment/moment.min.js' %}"></script>
+<script src="{% static 'plugins/inputmask/jquery.inputmask.min.js' %}"></script>
+
+<script>
+  $(function () {
+    $('[data-mask]').inputmask()
+  });
+
+  toastr.options = {
+    "closeButton": true,
+    "timeOut": "4000",
+    "extendedTimeOut": "2000",
+}
+</script>
+{% if messages %}
+{% for message in messages %}
+    {% if message.tags == 'success'%}
+      <script type=text/javascript>toastr.{{ message.tags }}('{{ message }}')</script>
+    {% elif message.tags == 'info' %}
+        <script type=text/javascript>toastr.{{ message.tags }}('{{ message }}')</script>
+    {% elif message.tags == 'warning' %}
+        <script type=text/javascript>toastr.{{ message.tags }}('{{ message }}')</script>
+    {% elif message.tags == 'error' %}
+        <script type=text/javascript>toastr.{{ message.tags }}('{{ message }}')</script>
+    {% endif %}
+{% endfor %}
+{% endif %}
+<!-- /.control-sidebar -->
+{% endblock %}
+{% block footer %}
+{% endblock %}
+
