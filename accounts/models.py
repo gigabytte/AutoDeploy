@@ -29,12 +29,12 @@ class Device(models.Model):
     device_name = models.CharField(max_length=30)
     pod_location = models.IntegerField(default=0)
     pod_number = models.IntegerField(default=0)
-    device_ip_address = models.CharField(max_length=11, default='1.1.1.1')
+    device_ip_address = models.CharField(max_length=16, default='1.1.1.1')
     device_mac_address = models.CharField(max_length=17, default='FF:FF:FF:FF:FF:FF')
     device_note = models.CharField(default='', max_length=100)
 
     def __str__(self):
-        return self.windows_name
+        return self.device_name
 
 
 class Scripts(models.Model):

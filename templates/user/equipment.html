@@ -80,7 +80,7 @@
                     <div class="input-group-prepend">
                       <span class="input-group-text"><i class="fas fa-location-arrow"></i></span>
                     </div>
-                    <input type="text" name="device_ip_address" class="form-control" data-inputmask="'alias': 'ip'" data-mask>
+                    <input type="text" name="device_ip_address" class="form-control" data-inputmask="'alias': 'ip'" data-mask-ip>
                   </div>
                   </br>
                   <!-- MAC address -->
@@ -90,7 +90,7 @@
                     <div class="input-group-prepend">
                       <span class="input-group-text"><i class="fas fa-laptop"></i></span>
                     </div>
-                    <input type="text" name="device_mac_address" class="form-control" data-inputmask="'alias': 'mac'" data-mask>
+                    <input type="text" name="device_mac_address" class="form-control" data-inputmask="'alias': 'mac'" data-mask-mac>
                   </div>
                     <!-- /.input group -->
                   <br>
@@ -294,17 +294,13 @@
 <script src="{% static 'plugins/moment/moment.min.js' %}"></script>
 <script src="{% static 'plugins/inputmask/jquery.inputmask.min.js' %}"></script>
 
-<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/css/toastr.css" rel="stylesheet"/>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/js/toastr.js"></script>
 
 <script>
   $(function () {
-    $('[data-mask]').inputmask()
-  });
-
-  $(function () {
-    $('[data-mask]').inputmask()
+    $('[data-mask-ip]').inputmask()
+    $('[data-mask-mac]').inputmask()
   });
 
   toastr.options = {
