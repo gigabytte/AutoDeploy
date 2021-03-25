@@ -17,14 +17,12 @@ from django.contrib import messages
 from itertools import chain
 
 
-def superuser_required():
-    def wrapper(wrapped):
-        class WrappedClass(UserPassesTestMixin, wrapped):
-            def test_func(self):
-                return self.request.user.is_superuser
+class AdminStaffRequiredMixin(LoginRequiredMixin, UserPassesTestMixin):
 
-        return WrappedClass
-    return wrapper
+    def test_func(self):
+        return self.request.user.is_superuser
+
+
 
 # this class is being deprecated in farvour of LDAP authication contexit()rol
 class SignUpView(View):
@@ -160,27 +158,24 @@ class Windows(LoginRequiredMixin, View):
         template = loader.get_template('user/windows.html')
         return TemplateResponse(request, template, args)
 
-@superuser_required()
-class All_Devices(LoginRequiredMixin, TemplateView):
+class All_Devices(AdminStaffRequiredMixin, TemplateView):
 
     login_url = '/login/'
     redirect_field_name = 'redirect_to'
 
     template_name = 'user/all_devices.html'
-    #model = Device
-
-    def get_queryset(self):
-        return Device.objects.all(), Console.objects.all()
+    model = Console
 
     def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
 
+        context = super(All_Devices, self).get_context_data(**kwargs)
+        context['device_details'] = Device.objects.all()
+        context['console_details'] = self.model.objects.all()
+        # And so on for more models
         print(context)
-
         return context
 
-@superuser_required()
-class Equipment(LoginRequiredMixin, generic.ListView):
+class Equipment(AdminStaffRequiredMixin, generic.ListView):
 
     login_url = '/login/'
     redirect_field_name = 'redirect_to'
@@ -237,6 +232,7 @@ class Equipment(LoginRequiredMixin, generic.ListView):
                     messages.info(request, 'A Device is already asscoaited with Pod Number %s Located in %s , please try again or delete old Device first.' % (podNumberSelected, read_podLocationSelected))
             else:
                 print('invalid Device form')
+                print(addDeviceForm.errors)
                 messages.error(request, 'Form Error please Try Again!')
                 return redirect('equipment')
 
@@ -280,8 +276,8 @@ class Equipment(LoginRequiredMixin, generic.ListView):
 
         return redirect('equipment')
 
-@superuser_required()
-class Console(LoginRequiredMixin, generic.ListView):
+
+class Console(AdminStaffRequiredMixin, generic.ListView):
 
     login_url = '/login/'
     redirect_field_name = 'redirect_to'
@@ -375,8 +371,8 @@ class Console(LoginRequiredMixin, generic.ListView):
 
         return redirect('console')
 
-@superuser_required()
-class All_Scripts(LoginRequiredMixin, generic.ListView):
+
+class All_Scripts(AdminStaffRequiredMixin, generic.ListView):
 
     login_url = '/login/'
     redirect_field_name = 'redirect_to'
@@ -392,8 +388,7 @@ class All_Scripts(LoginRequiredMixin, generic.ListView):
         kwargs = super().get_context_data(**kwargs)
         return kwargs
 
-@superuser_required()
-class Add_Scripts(LoginRequiredMixin, View):
+class Add_Scripts(AdminStaffRequiredMixin, View):
 
     login_url = '/login/'
     redirect_field_name = 'redirect_to'
@@ -432,8 +427,8 @@ class Add_Scripts(LoginRequiredMixin, View):
 
         return redirect('add_scripts')
 
-@superuser_required()
-class Edit_Scripts(LoginRequiredMixin, generic.ListView):
+
+class Edit_Scripts(AdminStaffRequiredMixin, generic.ListView):
 
     login_url = '/login/'
     redirect_field_name = 'redirect_to'
@@ -481,8 +476,8 @@ class Edit_Scripts(LoginRequiredMixin, generic.ListView):
         return redirect('edit_scripts')
 
 
-@superuser_required()
-class Delete_Scripts(LoginRequiredMixin, generic.ListView):
+
+class Delete_Scripts(AdminStaffRequiredMixin, generic.ListView):
 
     login_url = '/login/'
     redirect_field_name = 'redirect_to'

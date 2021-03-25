@@ -1,4 +1,11 @@
-# Base Demo Project for Device Automation Server, AutoDeploy
+# AutoDeploy Automation Server
+
+## Features
+- Ability to add, remove and Edit Automation Scripts
+- Ability to add, remove and edit endpoints in which scripts are deployed to
+- Authentication of User Creds against LDAP Server
+- Basic premission system of Script access to normal users and admins
+- Ansible based modular backend
 
 ## Deployment
 - Run Project in virtual Enviroment 
@@ -22,11 +29,12 @@ Super used creds can be found in provided ``` super_user_auth.txt ```
 - [x] LDAP Integration
 - [x] Console creation, deletion and editing
 - [x] Windows Device creation, deletion and editing
-- [ ] Script creation, deletion and editing (In Dev)
-- [ ] User Permissions (ie. who can access what devices and scripts) (In Dev)
-- [ ] Script deployment backend for consoles
-- [ ] Script deployment backend for windows devices (ie. basic commands)
-- [ ] VBS script deployment (ie complex scripts)
+- [x] Script creation, deletion and editing
+- [x] User Permissions (ie. who can access what devices and scripts)
+- [ ] Ability to View all Devices and Scripts in a dump format (In Dev)
+- [ ] Script deployment backend for consoles (In Dev)
+- [ ] Script deployment backend for windows devices (ie. basic commands) (In Dev)
+- [ ] Conversion of Scripts to Ansible based scripts
 - [x] Dasboard Struture and Flow Design, SEMI FINISHED
 
 ## Resources

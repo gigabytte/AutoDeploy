@@ -30,8 +30,8 @@
           <ol class="breadcrumb float-sm-right">
             <li class="breadcrumb-item"><a href="{% url 'dashboard' %}">Dashboard</a></li>
             <li class="breadcrumb-item"><a href="{% url 'all_scripts' %}">Settings</a></li>
-            <li class="breadcrumb-item"><a href="{% url 'all_scripts' %}">Scripts</a></li>
-            <li class="breadcrumb-item active">All Scripts</li>
+            <li class="breadcrumb-item"><a href="{% url 'all_devices' %}">Devices</a></li>
+            <li class="breadcrumb-item active">All Devices</li>
           </ol>
         </div>
       </div>
@@ -65,12 +65,14 @@
                     </tr>
                     </thead>
                     <tbody>
-                    {% if device_list %}
+                    {% if device_details %}
                       {% for device in device_details %}
                         <tr>
                           <td>{{ device.device_name }}</td>
-                          <td>{{ device.script_ext }}</td>
-                          <td>{{ device.script_version }}</td>
+                          <td>{{ device.pod_location }}</td>
+                          <td>{{ device.pod_number }}</td>
+                          <td>{{ device.device_ip_address }}</td>
+                          <td>{{ device.device_mac_address }}</td>
                           <td>{{ device.device_note }}</td>
                         </tr>
                       {% endfor %}
@@ -110,8 +112,8 @@
                     </tr>
                     </thead>
                     <tbody>
-                    {% if console_list %}
-                      {% for console in console_list %}
+                    {% if console_details %}
+                      {% for console in console_details %}
                         <tr>
                           <td>{{ console.console_name }}</td>
                           <td>{{ console.pod_location }}</td>
