@@ -1,0 +1,119 @@
+{% extends 'user/base_dashboard.html' %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  {% block head %}
+    <title>{% block title %}All Scripts{% endblock %}</title>  
+  {% endblock %}
+</head>
+{% block nav_item_scripts %}active{% endblock nav_item_scripts %}
+{% block nav_item_settings_tree_menu %}menu-open{% endblock nav_item_settings_tree_menu %}
+{% block nav_item_settings_tree_active %}active{% endblock nav_item_settings_tree_active %}
+{% block content %}
+
+  <!-- DataTables -->
+  <link rel="stylesheet" href="../../plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+  <link rel="stylesheet" href="../../plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
+  <link rel="stylesheet" href="../../plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
+
+ <!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+  <!-- Content Header (Page header) -->
+  <section class="content-header">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-6">
+          <h1>All Script Settings</h1>
+        </div>
+        <div class="col-sm-6">
+          <ol class="breadcrumb float-sm-right">
+            <li class="breadcrumb-item"><a href="{% url 'dashboard' %}">Dashboard</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'all_scripts' %}">Settings</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'all_scripts' %}">Scripts</a></li>
+            <li class="breadcrumb-item active">All Scripts</li>
+          </ol>
+        </div>
+      </div>
+    </div><!-- /.container-fluid -->
+  </section>
+      <!-- Main content -->
+      <section class="content">
+      
+        <div class="card"> 
+          <!-- /.card-header -->
+          <div class="card-body">
+            <table id="example2" class="table table-bordered table-hover">
+
+              <thead>
+              <tr>
+                <th>Script Name</th>
+                <th>File Extension</th>
+                <th>Script Version</th>
+                <th>Device Type</th>
+                <th>Script Note</th>
+                <th>Allow Staff</th>
+              </tr>
+              </thead>
+              <tbody>
+              {% if scripts_list %}
+                {% for script in scripts_list %}
+                  <tr>
+                    <td>{{ script.script_name }}</td>
+                    <td>{{ script.script_ext }}</td>
+                    <td>{{ script.script_version }}</td>
+                    {% if script.device_type is 0 %}
+                      <td>Console</td>
+                    {% else %}
+                      <td>Windows Device</td>
+                    {% endif %}
+                    <td>{{ script.script_note }}</td>
+                    <td>{{ script.is_staff }}</td>
+                  </tr>
+                {% endfor %}
+              {% endif %}
+              </tbody>
+            </table>
+          </div>
+          <!-- /.card-body -->
+        </div>
+
+      </section>
+  <!-- /.content -->
+</div>
+
+<!-- Control Sidebar -->
+<aside class="control-sidebar control-sidebar-dark">
+<!-- Control sidebar content goes here -->
+</aside>
+
+<script src="{% static 'plugins/datatables/jquery.dataTables.min.js' %}"></script>
+<script src="{% static 'plugins/datatables-bs4/js/dataTables.bootstrap4.min.js' %}"></script>
+<script src="{% static 'plugins/datatables-responsive/js/dataTables.responsive.min.js' %}"></script>
+<script src="{% static 'plugins/datatables-responsive/js/responsive.bootstrap4.min.js' %}"></script>
+<script src="{% static '/plugins/datatables-buttons/js/dataTables.buttons.min.js' %}"></script>
+<script src="{% static 'plugins/datatables-buttons/js/buttons.bootstrap4.min.js' %}"></script>
+
+<script>
+  $(function () {
+    $("#example1").DataTable({
+      "responsive": true, "lengthChange": false, "autoWidth": false,
+      "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+    }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+    $('#example2').DataTable({
+      "paging": true,
+      "lengthChange": false,
+      "searching": false,
+      "ordering": true,
+      "info": true,
+      "autoWidth": false,
+      "responsive": true,
+    });
+  });
+</script>
+
+<!-- /.control-sidebar -->
+{% endblock %}
+{% block footer %}
+{% endblock %}
+

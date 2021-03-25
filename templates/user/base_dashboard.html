@@ -125,29 +125,64 @@
             <li class="nav-item has-treeview {% block nav_item_settings_tree_menu %}{% endblock nav_item_settings_tree_menu %}">
               <a href="" class="nav-link {% block nav_item_settings_tree_active %}{% endblock nav_item_settings_tree_active %}">
                 <i class="nav-icon fas fa-cogs"></i>
-                <p>
+                <p >
                   Settings
                   <i class="right fas fa-angle-left"></i>
                 </p>
               </a>
-              <ul class="nav nav-treeview">
+              <ul class="nav nav-treeview ">
                 <li class="nav-item">
-                  <a href="{% url 'scripts' %}" class="nav-link {% block nav_item_scripts %}{% endblock nav_item_scripts %}">
+                  <a href="" class="nav-link ">
                     <i class="fas fa-scroll nav-icon"></i>
-                    <p>Scripts</p>
+                    <p>
+                      Scripts
+                      <i class="right fas fa-angle-left"></i>
+                    </p>
                   </a>
+                  <ul class="nav-item nav-treeview ">
+                    <li class="nav-item">
+                      <a href="{% url 'all_scripts' %}" class="nav-link ">
+                        <i class="far fa-dot-circle nav-icon"></i>
+                        <p>All Scripts</p>
+                      </a>
+                    </li>
+                    <li class="nav-item">
+                      <a href="{% url 'add_scripts' %}" class="nav-link ">
+                        <i class="far fa-dot-circle nav-icon"></i>
+                        <p>Add Scripts</p>
+                      </a>
+                    </li>
+                    <li class="nav-item">
+                      <a href="{% url 'edit_scripts' %}" class="nav-link ">
+                        <i class="far fa-dot-circle nav-icon"></i>
+                        <p>Edit Scripts</p>
+                      </a>
+                    </li>
+                    <li class="nav-item">
+                      <a href="{% url 'delete_scripts' %}" class="nav-link ">
+                        <i class="far fa-dot-circle nav-icon"></i>
+                        <p>Delete Scripts</p>
+                      </a>
+                    </li>
+                  </ul>
                 </li>
               </ul>
-              <ul class="nav nav-treeview">
-                <li class="nav-item {% block nav_item_devices_tree_menu %}{% endblock nav_item_devices_tree_menu %}">
-                  <a href="" class="nav-link {% block nav_item_devices_tree_active %}{% endblock nav_item_devices_tree_active %}">
+              <ul class="nav nav-treeview {% block nav_item_devices_tree_menu %}{% endblock nav_item_devices_tree_menu %}">
+                <li class="nav-item {% block nav_item_devices_tree_active %}{% endblock nav_item_devices_tree_active %}">
+                  <a href="" class="nav-link ">
                     <i class="fas fa-network-wired nav-icon"></i>
                     <p>
                       Devices
                       <i class="right fas fa-angle-left"></i>
                     </p>
                   </a>
-                  <ul class="nav-item nav-treeview">
+                  <ul class="nav-item nav-treeview ">
+                    <li class="nav-item">
+                      <a href="{% url 'all_devices' %}" class="nav-link ">
+                        <i class="far fa-dot-circle nav-icon"></i>
+                        <p>All Devices</p>
+                      </a>
+                    </li>
                     <li class="nav-item">
                       <a href="{% url 'console' %}" class="nav-link {% block nav_item_console %}{% endblock nav_item_console %}">
                         <i class="far fa-dot-circle nav-icon"></i>
@@ -162,9 +197,6 @@
                     </li>
                   </ul>
                 </li>
-              </ul>
-
-                
               </ul>
             </li>
           {% endif %}

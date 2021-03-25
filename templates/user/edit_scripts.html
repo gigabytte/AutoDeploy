@@ -1,0 +1,165 @@
+{% extends 'user/base_dashboard.html' %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  {% block head %}
+    <title>{% block title %}Edit Script{% endblock %}</title>  
+  {% endblock %}
+</head>
+{% block nav_item_scripts %}active{% endblock nav_item_scripts %}
+{% block nav_item_settings_tree_menu %}menu-open{% endblock nav_item_settings_tree_menu %}
+{% block nav_item_settings_tree_active %}active{% endblock nav_item_settings_tree_active %}
+{% block content %}
+
+<!-- iCheck for checkboxes and radio inputs -->
+<link rel="stylesheet" href="{% static 'plugins/icheck-bootstrap/icheck-bootstrap.min.css' %}">
+
+ <!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+    <!-- Edit script section -->
+    <div class="col">
+      <div class="card card-info">
+        <div class="card-header">
+          <h3 class="card-title">Edit Scripts</h3>
+
+          <div class="card-tools">
+            <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+              <i class="fas fa-minus"></i>
+            </button>
+          </div>
+        </div>
+        <div class="card-body">
+          <form method="get">
+
+            <label for="inputStatus">Select Script</label>
+            <select onchange="this.form.submit()" id="script_id" name="script_name" class="form-control custom-select">
+                <!-- NOTE** dump from database listing pods  -->
+              <option selected disabled>Select one</option>
+              {% if scripts_list %}
+                {% for script in scripts_list %}
+                  {% if script_details.id == script.id %}
+                    <option selected value="{{ script.id }}">{{ script.script_name }} (Ver. {{ script.script_version }} - Type. {{ script.script_ext }})</option>
+                  {% else %}
+                    <option value="{{ script.id }}">{{ script.script_name }} (Ver. {{ script.script_version }} - Type. {{ script.script_ext }})</option>
+                  {% endif %}
+                {% endfor %}
+              {% else %}
+                <option disabled>No Scripts Available</option>
+              {% endif %}
+            </select>
+            <noscript><input type="submit" value="Submit" name="get_script_detail"></noscript>
+          </form>
+          <form method="post">
+            {% csrf_token %}
+            
+            <label name="id" value="{{ script_details.id }}" for="inputName">Script Name</label>
+            <div class="form-group input-group has-feedback">
+              <input name="script_name" type="text" value="{{ script_details.script_name }}"class="form-control">
+            </div>
+            <label for="inputEstimatedBudget">Script Version</label>
+            <div class="form-group input-group has-feedback">
+                <input value="{{ script_details.script_version }}" step="0.1" min="1.0" name="script_version" type="number" id="inputEstimatedBudget" class="form-control">
+            </div>
+            <label for="inputStatus">Device Type</label>
+            <div class="form-group input-group has-feedback">
+    
+              <select id="inputStatus" name="device_type" type="text" class="form-control custom-select">
+                <option disabled>Select one</option>
+                {% if script_details.device_type is 0 %} 
+                  <option selected value='0'>Console</option>
+                {% else %}
+                  <option value='0'>Console</option>
+                {% endif %}
+                {% if script_details.device_type is 1 %} 
+                  <option selected value='1'>Windows Device</option>
+                {% else %}
+                  <option value='1'>Windows Device</option>
+                {% endif %}
+              </select>
+            </div>
+            <div class="form-group clearfix">
+              <div class="icheck-primary d-inline">
+                {% if script_details.is_staff == true %} 
+                  <input checked type="checkbox" id="checkboxPrimary1" name="is_staff">
+                {% else %}
+                  <input type="checkbox" id="checkboxPrimary1" name="is_staff">
+                {% endif %}
+                <label for="checkboxPrimary1">Allow Staff Access</label>
+              </div>
+            </div>
+    
+            </br> 
+            <label for="inputDescription">Script Note</label>
+            <div class="form-group input-group has-feedback">
+              <textarea maxlength="100" name="script_note" type="text" class="form-control" rows="4">{{ script_details.script_note }}</textarea>
+            </div>
+            <button type="button" class="btn btn-block btn-info btn-lg" data-toggle="modal" data-target="#modal-edit-pod">Edit Script</button>
+            <div class="modal fade" id="modal-edit-pod">
+              <div class="modal-dialog">
+                <div class="modal-content bg-info">
+                  <div class="modal-header">
+                    <h4 class="modal-title">Edit Script</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                    <p>Confirm you would like to edit this Script?</p>
+                  </div>
+                  <div class="modal-footer justify-content-between">
+                    <button type="button" class="btn btn-outline-light" data-dismiss="modal">Close</button>
+                    <button name="edit_script" type="submit" class="btn btn-outline-light">Confirm</button>
+                  </div>
+                </div>
+                <!-- /.modal-content -->
+              </div>
+              <!-- /.modal-dialog -->
+            </div>
+          </form>
+        </div>
+        <!-- /.card-body -->
+        
+      </div>
+      <!-- /.card -->
+    </div>
+  </section>
+  <!-- /.content -->
+</div>
+
+<!-- Control Sidebar -->
+<aside class="control-sidebar control-sidebar-dark">
+<!-- Control sidebar content goes here -->
+</aside>
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/css/toastr.css" rel="stylesheet"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/js/toastr.js"></script>
+<script>
+toastr.options = {
+  "closeButton": true,
+  "timeOut": "4000",
+  "extendedTimeOut": "2000",
+
+}
+
+</script>
+{% if messages %}
+{% for message in messages %}
+    {% if message.tags == 'success'%}
+      <script type=text/javascript>toastr.{{ message.tags }}('{{ message }}')</script>
+    {% elif message.tags == 'info' %}
+        <script type=text/javascript>toastr.{{ message.tags }}('{{ message }}')</script>
+    {% elif message.tags == 'warning' %}
+        <script type=text/javascript>toastr.{{ message.tags }}('{{ message }}')</script>
+    {% elif message.tags == 'error' %}
+        <script type=text/javascript>toastr.{{ message.tags }}('{{ message }}')</script>
+    {% endif %}
+{% endfor %}
+{% endif %}
+<!-- /.control-sidebar -->
+{% endblock %}
+{% block footer %}
+{% endblock %}
+

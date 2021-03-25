@@ -11,46 +11,176 @@
 {% block nav_item_settings_tree_menu %}menu-open{% endblock nav_item_settings_tree_menu %}
 {% block nav_item_settings_tree_active %}active{% endblock nav_item_settings_tree_active %}
 {% block content %}
+<!-- dropzonejs -->
+<link rel="stylesheet" href="{% static 'plugins/dropzone/min/dropzone.min.css' %}">
 
-  <!-- Content Wrapper. Contains page content -->
+ <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
-    <!-- Content Header (Page header) -->
-    <section class="content-header">
-        <h2>Page dedicated to Script settings</h2>
-    </section>
-
-    <div class="card">
-      <div class="card-header">
-        <h3 class="card-title">DataTable with minimal features &amp; hover style</h3>
+  <!-- Content Header (Page header) -->
+  <section class="content-header">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-6">
+          <h1>Script Settings</h1>
+        </div>
+        <div class="col-sm-6">
+          <ol class="breadcrumb float-sm-right">
+            <li class="breadcrumb-item"><a href="{% url 'dashboard' %}">Dashboard</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'scripts' %}">Settings</a></li>
+            <li class="breadcrumb-item active">Scripts</li>
+          </ol>
+        </div>
       </div>
-      <!-- /.card-header -->
-      <div class="card-body">
-        <div id="example2_wrapper" class="dataTables_wrapper dt-bootstrap4"><div class="row"><div class="col-sm-12 col-md-6"></div><div class="col-sm-12 col-md-6"></div></div><div class="row"><div class="col-sm-12"><table id="example2" class="table table-bordered table-hover dataTable" role="grid" aria-describedby="example2_info">
-          <thead>
-          <tr role="row"><th class="sorting_asc" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Rendering engine: activate to sort column descending">Rendering engine</th><th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending">Browser</th><th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-label="Platform(s): activate to sort column ascending">Platform(s)</th><th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-label="Engine version: activate to sort column ascending">Engine version</th><th class="sorting" tabindex="0" aria-controls="example2" rowspan="1" colspan="1" aria-label="CSS grade: activate to sort column ascending">CSS grade</th></tr>
-          </thead>
-          <tbody>
-          <tr role="row" class="odd">
-            <td class="sorting_1">Gecko</td>
-            <td>Firefox 1.0</td>
-            <td>Win 98+ / OSX.2+</td>
-            <td>1.7</td>
-            <td>A</td>
-          </tr></tbody>
-          <tfoot>
-          <tr><th rowspan="1" colspan="1">Rendering engine</th><th rowspan="1" colspan="1">Browser</th><th rowspan="1" colspan="1">Platform(s)</th><th rowspan="1" colspan="1">Engine version</th><th rowspan="1" colspan="1">CSS grade</th></tr>
-          </tfoot>
-        </table></div></div><div class="row"><div class="col-sm-12 col-md-5"><div class="dataTables_info" id="example2_info" role="status" aria-live="polite">Showing 1 to 10 of 57 entries</div></div><div class="col-sm-12 col-md-7"><div class="dataTables_paginate paging_simple_numbers" id="example2_paginate"><ul class="pagination"><li class="paginate_button page-item previous disabled" id="example2_previous"><a href="#" aria-controls="example2" data-dt-idx="0" tabindex="0" class="page-link">Previous</a></li><li class="paginate_button page-item active"><a href="#" aria-controls="example2" data-dt-idx="1" tabindex="0" class="page-link">1</a></li><li class="paginate_button page-item "><a href="#" aria-controls="example2" data-dt-idx="2" tabindex="0" class="page-link">2</a></li><li class="paginate_button page-item "><a href="#" aria-controls="example2" data-dt-idx="3" tabindex="0" class="page-link">3</a></li><li class="paginate_button page-item "><a href="#" aria-controls="example2" data-dt-idx="4" tabindex="0" class="page-link">4</a></li><li class="paginate_button page-item "><a href="#" aria-controls="example2" data-dt-idx="5" tabindex="0" class="page-link">5</a></li><li class="paginate_button page-item "><a href="#" aria-controls="example2" data-dt-idx="6" tabindex="0" class="page-link">6</a></li><li class="paginate_button page-item next" id="example2_next"><a href="#" aria-controls="example2" data-dt-idx="7" tabindex="0" class="page-link">Next</a></li></ul></div></div></div></div>
-      </div>
-    </div>
-      <!-- /.card-body -->
+    </div><!-- /.container-fluid -->
+  </section>
+      <!-- Main content -->
+      <section class="content">
+        <!-- Add device section -->
+        <div class="col">
+          <div class="card card-primary">
+            <div class="card-header">
+              <h3 class="card-title">Upload Script</h3>
 
+              <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+                  <i class="fas fa-minus"></i>
+                </button>
+              </div>
+            </div>
+            <div class="card-body">
+              <div id="actions" class="row">
+                <div class="col-lg-6">
+                  <div class="btn-group w-100">
+                    <span class="btn btn-success col fileinput-button">
+                      <i class="fas fa-plus"></i>
+                      <span>Add files</span>
+                    </span>
+                    <button type="submit" class="btn btn-primary col start">
+                      <i class="fas fa-upload"></i>
+                      <span>Start upload</span>
+                    </button>
+                    <button type="reset" class="btn btn-warning col cancel">
+                      <i class="fas fa-times-circle"></i>
+                      <span>Cancel upload</span>
+                    </button>
+                  </div>
+                </div>
+                <div class="col-lg-6 d-flex align-items-center">
+                  <div class="fileupload-process w-100">
+                    <div id="total-progress" class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+                      <div class="progress-bar progress-bar-success" style="width:0%;" data-dz-uploadprogress></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="table table-striped files" id="previews">
+                <div id="template" class="row mt-2">
+                  <div class="col-auto">
+                      <span class="preview"><img src="data:," alt="" data-dz-thumbnail /></span>
+                  </div>
+                  <div class="col d-flex align-items-center">
+                      <p class="mb-0">
+                        <span class="lead" data-dz-name></span>
+                        (<span data-dz-size></span>)
+                      </p>
+                      <strong class="error text-danger" data-dz-errormessage></strong>
+                  </div>
+                  <div class="col-4 d-flex align-items-center">
+                      <div class="progress progress-striped active w-100" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+                        <div class="progress-bar progress-bar-success" style="width:0%;" data-dz-uploadprogress></div>
+                      </div>
+                  </div>
+                  <div class="col-auto d-flex align-items-center">
+                    <div class="btn-group">
+                      <button class="btn btn-primary start">
+                        <i class="fas fa-upload"></i>
+                        <span>Start</span>
+                      </button>
+                      <button data-dz-remove class="btn btn-warning cancel">
+                        <i class="fas fa-times-circle"></i>
+                        <span>Cancel</span>
+                      </button>
+                      <button data-dz-remove class="btn btn-danger delete">
+                        <i class="fas fa-trash"></i>
+                        <span>Delete</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- /.card-body -->
+            
+          </div>
+          <!-- /.card -->
+        </section>
+  <!-- /.content -->
 </div>
 
 <!-- Control Sidebar -->
 <aside class="control-sidebar control-sidebar-dark">
 <!-- Control sidebar content goes here -->
 </aside>
+
+<!-- dropzonejs -->
+<script src="{% static 'plugins/dropzone/min/dropzone.min.js' %}"></script>
+
+<script>
+  // DropzoneJS Demo Code Start
+  Dropzone.autoDiscover = false;
+
+  // Get the template HTML and remove it from the doumenthe template HTML and remove it from the doument
+  var previewNode = document.querySelector("#template");
+  previewNode.id = "";
+  var previewTemplate = previewNode.parentNode.innerHTML;
+  previewNode.parentNode.removeChild(previewNode);
+
+  var myDropzone = new Dropzone(document.body, { // Make the whole body a dropzone
+    url: "/target-url", // Set the url
+    thumbnailWidth: 80,
+    thumbnailHeight: 80,
+    parallelUploads: 20,
+    previewTemplate: previewTemplate,
+    autoQueue: false, // Make sure the files aren't queued until manually added
+    previewsContainer: "#previews", // Define the container to display the previews
+    clickable: ".fileinput-button" // Define the element that should be used as click trigger to select files.
+  });
+
+  myDropzone.on("addedfile", function(file) {
+    // Hookup the start button
+    file.previewElement.querySelector(".start").onclick = function() { myDropzone.enqueueFile(file); };
+  });
+
+  // Update the total progress bar
+  myDropzone.on("totaluploadprogress", function(progress) {
+    document.querySelector("#total-progress .progress-bar").style.width = progress + "%";
+  });
+
+  myDropzone.on("sending", function(file) {
+    // Show the total progress bar when upload starts
+    document.querySelector("#total-progress").style.opacity = "1";
+    // And disable the start button
+    file.previewElement.querySelector(".start").setAttribute("disabled", "disabled");
+  });
+
+  // Hide the total progress bar when nothing's uploading anymore
+  myDropzone.on("queuecomplete", function(progress) {
+    document.querySelector("#total-progress").style.opacity = "0";
+  });
+
+  // Setup the buttons for all transfers
+  // The "add files" button doesn't need to be setup because the config
+  // `clickable` has already been specified.
+  document.querySelector("#actions .start").onclick = function() {
+    myDropzone.enqueueFiles(myDropzone.getFilesWithStatus(Dropzone.ADDED));
+  };
+  document.querySelector("#actions .cancel").onclick = function() {
+    myDropzone.removeAllFiles(true);
+  };
+  // DropzoneJS Demo Code End
+</script>
+
+
 <!-- /.control-sidebar -->
 {% endblock %}
 {% block footer %}

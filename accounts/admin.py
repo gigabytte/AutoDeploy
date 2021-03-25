@@ -1,5 +1,6 @@
 from django.contrib import admin
-from .models import Console
+from .models import *
 
 # Register your models here.
 admin.site.register(Console)
+admin.site.register(Scripts)

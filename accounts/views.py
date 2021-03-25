@@ -1,4 +1,4 @@
-from accounts.models import Console, Device
+from accounts.models import Console, Device, Scripts
 from django.shortcuts import render, redirect
 from django.views import generic, View
 from django.views.generic import TemplateView
@@ -7,7 +7,7 @@ from django.contrib.auth.models import User
 from django.http import HttpResponse
 from django.shortcuts import HttpResponseRedirect
 from django.template import loader
-from .forms import RegisterForm, LoginForm, AddDeviceForm, AddConsoleForm, DeleteConsoleForm, EditConsoleForm, AddDeviceForm, EditDeviceForm, DeleteDeviceForm
+from .forms import *
 from django.template.response import TemplateResponse
 from django_auth_ldap.backend import LDAPBackend
 from django.contrib.auth.mixins import UserPassesTestMixin, LoginRequiredMixin
@@ -159,6 +159,25 @@ class Windows(LoginRequiredMixin, View):
 
         template = loader.get_template('user/windows.html')
         return TemplateResponse(request, template, args)
+
+@superuser_required()
+class All_Devices(LoginRequiredMixin, TemplateView):
+
+    login_url = '/login/'
+    redirect_field_name = 'redirect_to'
+
+    template_name = 'user/all_devices.html'
+    #model = Device
+
+    def get_queryset(self):
+        return Device.objects.all(), Console.objects.all()
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        print(context)
+
+        return context
 
 @superuser_required()
 class Equipment(LoginRequiredMixin, generic.ListView):
@@ -357,7 +376,24 @@ class Console(LoginRequiredMixin, generic.ListView):
         return redirect('console')
 
 @superuser_required()
-class Scripts(LoginRequiredMixin, View):
+class All_Scripts(LoginRequiredMixin, generic.ListView):
+
+    login_url = '/login/'
+    redirect_field_name = 'redirect_to'
+
+    template_name = 'user/all_scripts.html'
+    model = Scripts
+    
+    def get_queryset(self):
+
+        return self.model.objects.all()
+
+    def get_context_data(self, **kwargs):
+        kwargs = super().get_context_data(**kwargs)
+        return kwargs
+
+@superuser_required()
+class Add_Scripts(LoginRequiredMixin, View):
 
     login_url = '/login/'
     redirect_field_name = 'redirect_to'
@@ -367,8 +403,122 @@ class Scripts(LoginRequiredMixin, View):
         if not request.user.is_authenticated:
             return HttpResponseRedirect('/login')
         else:
-            template = loader.get_template('user/scripts.html')
+            template = loader.get_template('user/add_scripts.html')
             return TemplateResponse(request, template, args)
+
+    def post(self, request, *args, **kwargs):
+        ctxt = {}
+        if 'add_scripts' in request.POST:
+            
+            addScriptsForm = AddScriptsForm(request.POST, request.FILES or None)
+            if addScriptsForm.is_valid():
+                if len(request.FILES) != 0:
+
+                    fileList = request.FILES.getlist('script_file')[0]
+
+                    addScriptsForm.script_ext = fileList.content_type
+                    addScriptsForm.script_size = fileList.size
+                    print(fileList.size)
+                    addScriptsForm.save()
+                    messages.success(request, 'Added New Script Scuccessfully!')
+                else:
+                    messages.error(request, 'File MISSING, please upload Script file')
+                
+                return redirect('add_scripts')
+            else:
+                print('invalid console form')
+                messages.error(request, 'Form Error please Try Again!')
+                return redirect('add_scripts')
+
+        return redirect('add_scripts')
+
+@superuser_required()
+class Edit_Scripts(LoginRequiredMixin, generic.ListView):
+
+    login_url = '/login/'
+    redirect_field_name = 'redirect_to'
+
+    template_name = 'user/edit_scripts.html'
+    model = Scripts
+    
+    def get_queryset(self):
+     
+        if self.request.GET.get('script_name'):
+            self.selectedScriptDetails = self.model.objects.get(pk=self.request.GET.get('script_name'))
+        return self.model.objects.all()
+
+    def get_context_data(self, **kwargs):
+        kwargs = super().get_context_data(**kwargs)
+
+        if self.request.GET.get('script_name'):
+            kwargs['script_details'] = self.selectedScriptDetails
+
+        return kwargs
+
+    def post(self, request, *args, **kwargs):
+        ctxt = {}
+        if 'edit_script' in request.POST:
+            editScriptFormObject = self.model.objects.get(id=self.request.GET.get('script_name'))
+            editScriptForm = EditScriptsForm(request.POST, instance=editScriptFormObject)
+            if editScriptForm.is_valid():
+                editScriptFormObject.script_name = editScriptForm.cleaned_data['script_name']
+                editScriptFormObject.script_version = editScriptForm.cleaned_data['script_version']
+                editScriptFormObject.device_type = editScriptForm.cleaned_data['device_type']
+                editScriptFormObject.is_staff = editScriptForm.cleaned_data['is_staff']
+                editScriptFormObject.script_note = editScriptForm.cleaned_data['script_note']
+
+                editScriptFormObject.update_save()
+
+                messages.success(request, 'Successfully edited Script')
+                print('Successfuly edited script')
+
+            else:
+                print('edit script not valid')
+                print(editScriptForm.errors)
+                messages.error(request, 'Form Error please Try Again!')
+                return redirect('edit_scripts')
+            
+        return redirect('edit_scripts')
+
+
+@superuser_required()
+class Delete_Scripts(LoginRequiredMixin, generic.ListView):
+
+    login_url = '/login/'
+    redirect_field_name = 'redirect_to'
+
+    template_name = 'user/delete_scripts.html'
+    model = Scripts
+    
+    def get_queryset(self):
+
+        return self.model.objects.all()
+
+    def get_context_data(self, **kwargs):
+        kwargs = super().get_context_data(**kwargs)
+        return kwargs
+
+    def post(self, request, *args, **kwargs):
+        ctxt = {}
+        
+        if 'delete_scripts' in request.POST:
+
+            deleteScriptsForm = DeleteScriptsForm(request.POST)
+            if deleteScriptsForm.is_valid():
+            
+                scriptID = deleteScriptsForm.cleaned_data['script_name']
+
+                self.model.objects.filter(id=scriptID).delete()
+
+                messages.success(request, 'Successfully deleted Script')
+                print('Successfuly delete script')
+
+            else:
+                print('delete script not valid')
+                messages.error(request, 'Form Error please Try Again!')
+                return redirect('delete_scripts')
+
+        return redirect('delete_scripts')
 
 class Logout(View):
     def post(self, request):

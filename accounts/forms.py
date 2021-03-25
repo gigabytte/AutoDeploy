@@ -1,5 +1,5 @@
 from django import forms
-from .models import Console, Device
+from .models import Console, Device, Scripts
 
 class RegisterForm(forms.Form):
     username = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control'}))
@@ -44,3 +44,18 @@ class DeleteDeviceForm(forms.ModelForm):
     class Meta:
         model = Device
         fields = ['device_name']
+
+class AddScriptsForm(forms.ModelForm):
+    class Meta:
+        model = Scripts
+        fields = ['script_name', 'script_version', 'device_type', 'is_staff', 'script_note', 'script_file']
+
+class DeleteScriptsForm(forms.ModelForm):
+    class Meta:
+        model = Scripts
+        fields = ['script_name']
+
+class EditScriptsForm(forms.ModelForm):
+    class Meta:
+        model = Scripts
+        fields = ['id', 'script_name', 'script_version', 'device_type', 'is_staff', 'script_note']
