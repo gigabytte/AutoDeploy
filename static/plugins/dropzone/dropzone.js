@@ -516,7 +516,9 @@ var Dropzone = /*#__PURE__*/function (_Emitter) {
          * Called when dropzone initialized
          * You can add event listeners here
          */
-        init: function init() {},
+        init: function init() {
+          
+        },
 
         /**
          * Can be an **object** of additional parameters to transfer to the server, **or** a `Function`

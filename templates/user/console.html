@@ -39,7 +39,7 @@
         <div class="col-sm-6">
           <ol class="breadcrumb float-sm-right">
             <li class="breadcrumb-item"><a href="{% url 'dashboard' %}">Dashboard</a></li>
-            <li class="breadcrumb-item"><a href="{% url 'scripts' %}">Settings</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'console' %}">Settings</a></li>
             <li class="breadcrumb-item"><a href="{% url 'console' %}">Devices</a></li>
             <li class="breadcrumb-item active">Console Managers</li>
           </ol>
@@ -67,7 +67,7 @@
                   {% csrf_token %}
                   <label for="inputName">Console Manager Name</label>
                   <div class="form-group input-group has-feedback">
-                    <input name="console_name" type="text" class="form-control">
+                    <input maxlength="30" name="console_name" type="text" class="form-control">
                   </div>
                   <label for="inputStatus">Pod Location</label>
                   <div class="form-group input-group has-feedback">
@@ -271,7 +271,7 @@
  
             <!-- /.card -->
           </div>
-          
+        </div>
         </section>
   <!-- /.content -->
 </div>

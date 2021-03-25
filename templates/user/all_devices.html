@@ -1,0 +1,175 @@
+{% extends 'user/base_dashboard.html' %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  {% block head %}
+    <title>{% block title %}All Devices{% endblock %}</title>  
+  {% endblock %}
+</head>
+{% block nav_item_scripts %}active{% endblock nav_item_scripts %}
+{% block nav_item_settings_tree_menu %}menu-open{% endblock nav_item_settings_tree_menu %}
+{% block nav_item_settings_tree_active %}active{% endblock nav_item_settings_tree_active %}
+{% block content %}
+
+<!-- DataTables -->
+<link rel="stylesheet" href="../../plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+<link rel="stylesheet" href="../../plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
+<link rel="stylesheet" href="../../plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
+
+ <!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+  <!-- Content Header (Page header) -->
+  <section class="content-header">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-6">
+          <h1>All Device Settings</h1>
+        </div>
+        <div class="col-sm-6">
+          <ol class="breadcrumb float-sm-right">
+            <li class="breadcrumb-item"><a href="{% url 'dashboard' %}">Dashboard</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'all_scripts' %}">Settings</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'all_scripts' %}">Scripts</a></li>
+            <li class="breadcrumb-item active">All Scripts</li>
+          </ol>
+        </div>
+      </div>
+    </div><!-- /.container-fluid -->
+          <!-- Main content -->
+          <section class="content">
+            <!-- Add device section -->
+            <div class="col">
+              <div class="card card-primary">
+                <div class="card-header">
+                  <h3 class="card-title">Windows Devices</h3>
+    
+                  <div class="card-tools">
+                    <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+                      <i class="fas fa-minus"></i>
+                    </button>
+                  </div>
+                </div>
+                <div class="card-body">
+  
+                  <table id="all_devices" class="table table-bordered table-hover">
+  
+                    <thead>
+                    <tr>
+                      <th>Device Name</th>
+                      <th>Pod Location</th>
+                      <th>Pod Number</th>
+                      <th>IP Address</th>
+                      <th>MAC Address</th>
+                      <th>Device Note</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% if device_list %}
+                      {% for device in device_details %}
+                        <tr>
+                          <td>{{ device.device_name }}</td>
+                          <td>{{ device.script_ext }}</td>
+                          <td>{{ device.script_version }}</td>
+                          <td>{{ device.device_note }}</td>
+                        </tr>
+                      {% endfor %}
+                    {% endif %}
+                    </tbody>
+                  </table>
+    
+                </div>
+                <!-- /.card-body -->
+                
+              </div>
+            </div>
+              <!-- /.card -->
+
+              <div class="col">
+              <div class="card card-secondary">
+                <div class="card-header">
+                  <h3 class="card-title">Consoles</h3>
+    
+                  <div class="card-tools">
+                    <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+                      <i class="fas fa-minus"></i>
+                    </button>
+                  </div>
+                </div>
+                <div class="card-body">
+  
+                  <table id="all_consoles" class="table table-bordered table-hover">
+  
+                    <thead>
+                    <tr>
+                      <th>Console Name</th>
+                      <th>Pod Location</th>
+                      <th>Pod Number</th>
+                      <th>IP Address</th>
+                      <th>Console Note</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% if console_list %}
+                      {% for console in console_list %}
+                        <tr>
+                          <td>{{ console.console_name }}</td>
+                          <td>{{ console.pod_location }}</td>
+                          <td>{{ console.pod_number }}</td>
+                          <td>{{ console.console_ip_address }}</td>
+                          <td>{{ console.console_note }}</td>
+                        </tr>
+                      {% endfor %}
+                    {% endif %}
+                    </tbody>
+                  </table>
+    
+                </div>
+                <!-- /.card-body -->
+                
+              </div>
+            </div>
+              <!-- /.card -->
+          </section>
+    <!-- /.content -->
+</div>
+
+<!-- Control Sidebar -->
+<aside class="control-sidebar control-sidebar-dark">
+<!-- Control sidebar content goes here -->
+</aside>
+<script src="{% static 'plugins/datatables/jquery.dataTables.min.js' %}"></script>
+<script src="{% static 'plugins/datatables-bs4/js/dataTables.bootstrap4.min.js' %}"></script>
+<script src="{% static 'plugins/datatables-responsive/js/dataTables.responsive.min.js' %}"></script>
+<script src="{% static 'plugins/datatables-responsive/js/responsive.bootstrap4.min.js' %}"></script>
+<script src="{% static '/plugins/datatables-buttons/js/dataTables.buttons.min.js' %}"></script>
+<script src="{% static 'plugins/datatables-buttons/js/buttons.bootstrap4.min.js' %}"></script>
+
+<script>
+  $(function () {
+    $('#all_devices').DataTable({
+      "paging": true,
+      "lengthChange": false,
+      "searching": false,
+      "ordering": true,
+      "info": true,
+      "autoWidth": false,
+      "responsive": true,
+    });
+  $('#all_consoles').DataTable({
+      "paging": true,
+      "lengthChange": false,
+      "searching": false,
+      "ordering": true,
+      "info": true,
+      "autoWidth": false,
+      "responsive": true,
+    });
+  });
+</script>
+
+<!-- /.control-sidebar -->
+{% endblock %}
+{% block footer %}
+{% endblock %}
+

@@ -21,7 +21,7 @@ Super used creds can be found in provided ``` super_user_auth.txt ```
 - [x] AdminLTE Integration
 - [x] LDAP Integration
 - [x] Console creation, deletion and editing
-- [ ] Windows Device creation, deletion and editing (In Dev)
+- [x] Windows Device creation, deletion and editing
 - [ ] Script creation, deletion and editing (In Dev)
 - [ ] User Permissions (ie. who can access what devices and scripts) (In Dev)
 - [ ] Script deployment backend for consoles

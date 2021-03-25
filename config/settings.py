@@ -195,11 +195,11 @@ STATICFILES_DIRS = [
 
 STATIC_URL = '/static/'
 
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
+
+
 # redirect user to website root once logged in or logged out
 LOGIN_REDIRECT_URL = 'home'
 LOGOUT_REDIRECT_URL = 'home'
-
-# fake email redirect to local file
-EMAIL_FILE_PATH = str(BASE_DIR.joinpath('sent_emails'))
-EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
 
