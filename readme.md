@@ -31,7 +31,8 @@ Super used creds can be found in provided ``` super_user_auth.txt ```
 - [x] Windows Device creation, deletion and editing
 - [x] Script creation, deletion and editing
 - [x] User Permissions (ie. who can access what devices and scripts)
-- [ ] Ability to View all Devices and Scripts in a dump format (In Dev)
+- [x] Ability to View all Devices and Scripts in a dump format
+- [ ] Integrate async subporcess backend for Ansible deployment
 - [ ] Script deployment backend for consoles (In Dev)
 - [ ] Script deployment backend for windows devices (ie. basic commands) (In Dev)
 - [ ] Conversion of Scripts to Ansible based scripts
@@ -39,6 +40,13 @@ Super used creds can be found in provided ``` super_user_auth.txt ```
 
 ## Resources
 Project Followed the [Django Login and Logout Tutorial](https://learndjango.com/tutorials/django-login-and-logout-tutorial) by Will Vincent
+Async [Subprocess](https://docs.python.org/3/library/subprocess.html) Backend
+- [Stackoverflow](https://stackoverflow.com/questions/636561/how-can-i-run-an-external-command-asynchronously-from-python) topic on Subprocess
 
 ### Known Issues
-- Downloading ```.env``` files from drive results in env file being saved as ```.txt``` file. Rename ``` env ``` file in root of AutoDeploy to ``` .env ```
+- Deployment using ansible backend needs final dev
+- Integrating an async method with frontend (Network and Windows Deployment Page) for logging Ansible output
+- Dashaboard Settings Menu does not collapse on selection
+- LDAPS does not function properly and returns Cert error on Login attempt
+- Cannot update code for Script under Edit Script Section. User must currently delete and make new Script to update
+

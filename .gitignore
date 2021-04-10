@@ -1,3 +1,4 @@
 *.env
 super_user_auth.txt
-media
+media/scripts/*
+certs/*

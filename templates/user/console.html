@@ -22,6 +22,7 @@
 {% block nav_item_settings_tree_active %}active{% endblock nav_item_settings_tree_active %}
 {% block nav_item_devices_tree_menu %}menu-open{% endblock nav_item_devices_tree_menu %}
 {% block nav_item_devices_tree_active %}active{% endblock nav_item_devices_tree_active %}
+{% block nav_item_settings_device_active %}active{% endblock nav_item_settings_device_active %}
 {% block content %}
 
 
@@ -96,7 +97,7 @@
                   <br>
                   <label for="inputDescription">Console Note</label>
                   <div class="form-group input-group has-feedback">
-                    <textarea maxlength="100" name="console_note" type="text" class="form-control" rows="4"></textarea>
+                    <textarea maxlength="100" name="console_note" type="text" class="form-control" rows="2"></textarea>
                   </div>
                   <button name="add_console" type="submit" class="btn btn-block btn-primary btn-lg">Add Console</button>
                 </form>
@@ -181,7 +182,7 @@
                   <br>
                   <label for="inputDescription">Console Note</label>
                   <div class="form-group input-group has-feedback">
-                    <textarea maxlength="100" name="console_note" type="text" class="form-control" rows="4">{{ console_details.console_note }}</textarea>
+                    <textarea maxlength="100" name="console_note" type="text" class="form-control" rows="2">{{ console_details.console_note }}</textarea>
                   </div>
                   <button type="button" class="btn btn-block btn-info btn-lg" data-toggle="modal" data-target="#modal-edit-pod">Edit Console</button>
                   <div class="modal fade" id="modal-edit-pod">

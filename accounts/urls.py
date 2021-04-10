@@ -2,6 +2,7 @@ from django.urls import path
 from . import views as Views
 from django.contrib.auth.views import LogoutView
 
+# All URLS for accounts app, all urls start @ base of appplication
 urlpatterns = [
     path('',Views.Home.as_view(), name='home'),
     #path('signup/', Views.SignUpView.as_view(), name='signup'), deprecated due to ldap authentication
