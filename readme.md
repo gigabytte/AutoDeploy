@@ -1,4 +1,4 @@
-# AutoDeploy Automation Server
+# OTU Dashboard Automation Server
 
 ## Features
 - Ability to add, remove and Edit Automation Scripts
