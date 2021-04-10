@@ -4,7 +4,6 @@ from django.dispatch import receiver
 import uuid
 import os
 
-# Create your models here.
 
 class Console(models.Model):
     POD_LOCATIONS = (
@@ -19,7 +18,6 @@ class Console(models.Model):
 
     def __str__(self):
         return self.console_name
-
 
 class Device(models.Model):
     POD_LOCATIONS = (
@@ -55,6 +53,7 @@ class Scripts(models.Model):
     def __str__(self):
         return self.script_name
 
+    # custom save function, on save generate file extension type to be saved to db
     def save(self, *args, **kwargs):
         self.script_ext = self.script_file.file.content_type
         super().save(*args, **kwargs)

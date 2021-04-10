@@ -24,7 +24,6 @@ class EditConsoleForm(forms.ModelForm):
         model = Console
         fields = ['id', 'console_name', 'pod_location', 'pod_number', 'console_ip_address', 'console_note']
 
-
 class DeleteConsoleForm(forms.ModelForm):
     class Meta:
         model = Console
@@ -59,3 +58,18 @@ class EditScriptsForm(forms.ModelForm):
     class Meta:
         model = Scripts
         fields = ['id', 'script_name', 'script_version', 'device_type', 'is_staff', 'script_note']
+
+class SelectConsoleForm(forms.ModelForm):
+    class Meta:
+        model = Console
+        fields = ['console_name']
+
+class SelectScriptForm(forms.ModelForm):
+    class Meta:
+        model = Scripts
+        fields = ['script_name']
+
+class SelectDeviceForm(forms.ModelForm):
+    class Meta:
+        model = Device
+        fields = ['device_name']
